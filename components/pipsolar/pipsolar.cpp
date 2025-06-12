@@ -871,6 +871,10 @@ uint8_t Pipsolar::check_incoming_crc_() {
   return 0;
 }
 
+bool Pipsolar::command_requires_crc(const char *cmd) {
+  return !(strcmp(cmd, "QT") == 0 );
+}
+
 // send next command used
 uint8_t Pipsolar::send_next_command_() {
   uint16_t crc16;
@@ -886,7 +890,7 @@ uint8_t Pipsolar::send_next_command_() {
     this->empty_uart_buffer_();
     this->read_pos_ = 0;
     this->write_str(command);
-    if (command <> "QT"){
+    if (command_requires_crc(command)) {
      crc16 = cal_crc_half_(byte_command, length);
      // checksum
      this->write(((uint8_t)((crc16) >> 8)));   // highbyte
@@ -918,7 +922,7 @@ void Pipsolar::send_next_poll_() {
   this->write_array(this->used_polling_commands_[this->last_polling_command_].command,
                     this->used_polling_commands_[this->last_polling_command_].length);
   
-  if (this->used_polling_commands_[this->last_polling_command_].command] <> "QT") {
+  if (command_requires_crc(this->used_polling_commands_[this->last_polling_command_].command])) {
    crc16 = cal_crc_half_(this->used_polling_commands_[this->last_polling_command_].command,
                         this->used_polling_commands_[this->last_polling_command_].length);
   
