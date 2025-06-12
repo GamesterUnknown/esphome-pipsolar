@@ -922,7 +922,7 @@ void Pipsolar::send_next_poll_() {
   this->write_array(this->used_polling_commands_[this->last_polling_command_].command,
                     this->used_polling_commands_[this->last_polling_command_].length);
   
-  if (command_requires_crc(this->used_polling_commands_[this->last_polling_command_].command)) {
+  if (command_requires_crc((char*)this->used_polling_commands_[this->last_polling_command_].command)) {
    crc16 = cal_crc_half_(this->used_polling_commands_[this->last_polling_command_].command,
                         this->used_polling_commands_[this->last_polling_command_].length);
   
