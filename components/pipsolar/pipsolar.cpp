@@ -930,6 +930,8 @@ void Pipsolar::send_next_poll_() {
    this->write(((uint8_t)((crc16) >> 8)));   // highbyte
    this->write(((uint8_t)((crc16) &0xff)));  // lowbyte
   }
+  else 
+    this->write(0xFF);
   // end Byte
   this->write(0x0D);
   ESP_LOGD(TAG, "Sending polling command : %s with length %d",
