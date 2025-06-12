@@ -885,12 +885,14 @@ uint8_t Pipsolar::send_next_command_() {
     this->command_start_millis_ = millis();
     this->empty_uart_buffer_();
     this->read_pos_ = 0;
-    crc16 = cal_crc_half_(byte_command, length);
     this->write_str(command);
-    // checksum
-    this->write(((uint8_t)((crc16) >> 8)));   // highbyte
-    this->write(((uint8_t)((crc16) &0xff)));  // lowbyte
-    // end Byte
+    if (command <> "QT"){
+     crc16 = cal_crc_half_(byte_command, length);
+     // checksum
+     this->write(((uint8_t)((crc16) >> 8)));   // highbyte
+     this->write(((uint8_t)((crc16) &0xff)));  // lowbyte
+    }
+      // end Byte
     this->write(0x0D);
     ESP_LOGD(TAG, "Sending command from queue: %s with length %d", command, length);
     return 1;
