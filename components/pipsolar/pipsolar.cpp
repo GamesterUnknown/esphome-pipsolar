@@ -823,7 +823,6 @@ void Pipsolar::loop() {
       if (byte == 0x0D) {
         this->read_buffer_[this->read_pos_] = 0;
         this->empty_uart_buffer_();
-        ESP_LOGD(TAG, "Received response: %.*s", this->read_pos_, this->read_buffer_);
         if (this->state_ == STATE_POLL) {
           this->state_ = STATE_POLL_COMPLETE;
         }
