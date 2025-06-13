@@ -811,7 +811,9 @@ void Pipsolar::loop() {
     while (this->available()) {
       uint8_t byte;
       this->read_byte(&byte);
-
+      if (this->state_ == STATE_COMMAND) {
+       ESP_LOGD(TAG, "Position %zu Byte Received: '%c' (0x%02X)",this->read_pos_, byte, byte);
+      } 
       if (this->read_pos_ == PIPSOLAR_READ_BUFFER_LENGTH) {
         this->read_pos_ = 0;
         this->empty_uart_buffer_();
