@@ -58,6 +58,9 @@ void Pipsolar::loop() {
         this->state_ = STATE_IDLE;
       }
     } else {
+      if (this->last_qt_) {
+          this->last_qt_->publish_state(this->read_buffer_);
+        }
       ESP_LOGD(TAG, "response length for command %s not OK: with length %zu",
                this->command_queue_[this->command_queue_position_].c_str(), this->read_pos_);
       this->command_queue_[this->command_queue_position_] = std::string("");
