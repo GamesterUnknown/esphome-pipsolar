@@ -38,6 +38,7 @@ void Pipsolar::loop() {
     }
   }
   if (this->state_ == STATE_COMMAND_COMPLETE) {
+    ESP_LOGD(TAG, "Received response %s", this->read_buffer_);
     if (this->check_incoming_length_(4)) {
       ESP_LOGD(TAG, "response length for command OK");
       if (this->check_incoming_crc_()) {
@@ -790,6 +791,7 @@ void Pipsolar::loop() {
   }
 
   if (this->state_ == STATE_POLL_COMPLETE) {
+    ESP_LOGD(TAG, "Received response %s", this->read_buffer_);
     if (this->check_incoming_crc_()) {
       if (this->read_buffer_[0] == '(' && this->read_buffer_[1] == 'N' && this->read_buffer_[2] == 'A' &&
           this->read_buffer_[3] == 'K') {
