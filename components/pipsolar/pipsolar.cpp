@@ -38,7 +38,10 @@ void Pipsolar::loop() {
     }
   }
   if (this->state_ == STATE_COMMAND_COMPLETE) {
-    ESP_LOGD(TAG, "Received response %s", this->read_buffer_);
+    char tmp[PIPSOLAR_READ_BUFFER_LENGTH];
+    sprintf(tmp, "%s", this->read_buffer_);
+    ESP_LOGD(TAG, "Received response: %s", tmp);
+    
     if (this->check_incoming_length_(4)) {
       ESP_LOGD(TAG, "response length for command OK");
       if (this->check_incoming_crc_()) {
@@ -59,9 +62,7 @@ void Pipsolar::loop() {
         this->state_ = STATE_IDLE;
       }
     } else {
-      if (this->last_qt_) {
-          char tmp[PIPSOLAR_READ_BUFFER_LENGTH];
-          sprintf(tmp, "%s", this->read_buffer_);
+      if (this->last_qt_) {          
           this->last_qt_->publish_state(tmp);
         }
       ESP_LOGD(TAG, "response length for command %s not OK: with length %zu",
@@ -480,6 +481,7 @@ void Pipsolar::loop() {
     std::string fc;
     char tmp[PIPSOLAR_READ_BUFFER_LENGTH];
     sprintf(tmp, "%s", this->read_buffer_);
+    ESP_LOGD(TAG, "Received response: %s", tmp);
     switch (this->used_polling_commands_[this->last_polling_command_].identifier) {
       case POLLING_QPIRI:
         ESP_LOGD(TAG, "Decode QPIRI");
@@ -791,7 +793,6 @@ void Pipsolar::loop() {
   }
 
   if (this->state_ == STATE_POLL_COMPLETE) {
-    ESP_LOGD(TAG, "Received response %s", this->read_buffer_);
     if (this->check_incoming_crc_()) {
       if (this->read_buffer_[0] == '(' && this->read_buffer_[1] == 'N' && this->read_buffer_[2] == 'A' &&
           this->read_buffer_[3] == 'K') {
@@ -822,6 +823,7 @@ void Pipsolar::loop() {
       if (byte == 0x0D) {
         this->read_buffer_[this->read_pos_] = 0;
         this->empty_uart_buffer_();
+        ESP_LOGD(TAG, "Received response: %.*s", this->read_pos_, this->read_buffer_);
         if (this->state_ == STATE_POLL) {
           this->state_ = STATE_POLL_COMPLETE;
         }
