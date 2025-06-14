@@ -44,8 +44,8 @@ void Pipsolar::loop() {
       char tmp[PIPSOLAR_READ_BUFFER_LENGTH];
       sprintf(tmp, "%s", this->read_buffer_);
       ESP_LOGD(TAG, "Received response: %s", tmp);
-      if (this->last_CustomCommand_) {          
-          this->last_CustomCommand_->publish_state(tmp);
+      if (this->last_custom_command_) {          
+          this->last_custom_command_->publish_state(tmp);
       }
       if (this->check_incoming_length_(4)) {
         ESP_LOGD(TAG, "response length for command %s is OK", 
