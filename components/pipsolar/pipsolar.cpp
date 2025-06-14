@@ -38,14 +38,18 @@ void Pipsolar::loop() {
     }
   }
   if (this->state_ == STATE_COMMAND_COMPLETE) {
-    char tmp[PIPSOLAR_READ_BUFFER_LENGTH];
-    sprintf(tmp, "%s", this->read_buffer_);
-    ESP_LOGD(TAG, "Received response: %s", tmp);
     
-    if (this->check_incoming_length_(4)) {
-      ESP_LOGD(TAG, "response length for command OK");
-      if (this->check_incoming_crc_()) {
-        // crc ok
+    if (this->check_incoming_crc_()) {
+      // crc ok
+      char tmp[PIPSOLAR_READ_BUFFER_LENGTH];
+      sprintf(tmp, "%s", this->read_buffer_);
+      ESP_LOGD(TAG, "Received response: %s", tmp);
+      if (this->last_CustomCommand_) {          
+          this->last_CustomCommand_->publish_state(tmp);
+      }
+      if (this->check_incoming_length_(4)) {
+        ESP_LOGD(TAG, "response length for command %s is OK", 
+                this->command_queue_[this->command_queue_position_].c_str());    
         if (this->read_buffer_[1] == 'A' && this->read_buffer_[2] == 'C' && this->read_buffer_[3] == 'K') {
           ESP_LOGD(TAG, "command successful");
         } else {
@@ -54,22 +58,19 @@ void Pipsolar::loop() {
         this->command_queue_[this->command_queue_position_] = std::string("");
         this->command_queue_position_ = (command_queue_position_ + 1) % COMMAND_QUEUE_LENGTH;
         this->state_ = STATE_IDLE;
-
-      } else {
-        // crc failed
-        this->command_queue_[this->command_queue_position_] = std::string("");
-        this->command_queue_position_ = (command_queue_position_ + 1) % COMMAND_QUEUE_LENGTH;
-        this->state_ = STATE_IDLE;
+      } else {        
+         ESP_LOGD(TAG, "response length for command %s is: %zu",
+               this->command_queue_[this->command_queue_position_].c_str(), this->read_pos_);        
+         
+         this->command_queue_[this->command_queue_position_] = std::string("");
+         this->command_queue_position_ = (command_queue_position_ + 1) % COMMAND_QUEUE_LENGTH;
+         this->state_ = STATE_IDLE;
       }
     } else {
-      if (this->last_qt_) {          
-          this->last_qt_->publish_state(tmp);
-        }
-      ESP_LOGD(TAG, "response length for command %s not OK: with length %zu",
-               this->command_queue_[this->command_queue_position_].c_str(), this->read_pos_);
-      this->command_queue_[this->command_queue_position_] = std::string("");
-      this->command_queue_position_ = (command_queue_position_ + 1) % COMMAND_QUEUE_LENGTH;
-      this->state_ = STATE_IDLE;
+     // crc failed
+       this->command_queue_[this->command_queue_position_] = std::string("");
+       this->command_queue_position_ = (command_queue_position_ + 1) % COMMAND_QUEUE_LENGTH;
+       this->state_ = STATE_IDLE;  
     }
   }
 
@@ -811,9 +812,6 @@ void Pipsolar::loop() {
     while (this->available()) {
       uint8_t byte;
       this->read_byte(&byte);
-      if (this->state_ == STATE_COMMAND) {
-       ESP_LOGD(TAG, "Position %zu Byte Received: '%c' (0x%02X)",this->read_pos_, byte, byte);
-      } 
       if (this->read_pos_ == PIPSOLAR_READ_BUFFER_LENGTH) {
         this->read_pos_ = 0;
         this->empty_uart_buffer_();
