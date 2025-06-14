@@ -47,6 +47,15 @@ struct PollingCommand {
     this->add_polling_command_(#polling_command, POLLING_##polling_command); \
   }
 
+#define PIPSOLAR_NOPOLL_ENTITY_(type, name) \
+ protected: \
+  type *name##_{}; /* NOLINT */ \
+\
+ public: \
+  void set_##name(type *name) { /* NOLINT */ \
+    this->name##_ = name; \
+  }
+
 #define PIPSOLAR_SENSOR(name, polling_command, value_type) \
   PIPSOLAR_VALUED_ENTITY_(sensor::Sensor, name, polling_command, value_type)
 #define PIPSOLAR_SWITCH(name, polling_command) PIPSOLAR_ENTITY_(switch_::Switch, name, polling_command)
@@ -191,6 +200,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   PIPSOLAR_TEXT_SENSOR(last_qt, QT)
   PIPSOLAR_TEXT_SENSOR(last_qmn, QMN)
   PIPSOLAR_TEXT_SENSOR(last_qbatcd, QBATCD)
+  PIPSOLAR_NOPOLL_ENTITY_(text_sensor::TextSensor, last_CustomCommand_)
 
   PIPSOLAR_SWITCH(output_source_priority_utility_switch, QPIRI)
   PIPSOLAR_SWITCH(output_source_priority_solar_switch, QPIRI)
