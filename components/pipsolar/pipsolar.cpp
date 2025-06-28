@@ -1,5 +1,7 @@
 #include "pipsolar.h"
 #include "esphome/core/log.h"
+#include <unordered_set>
+#include <string>
 
 namespace esphome {
 namespace pipsolar {
@@ -880,7 +882,21 @@ uint8_t Pipsolar::check_incoming_crc_() {
 }
 
 bool Pipsolar::command_requires_crc(const char *cmd) {
-  return !(strcmp(cmd, "QT") == 0 );
+  static const std::unordered_set<std::string> no_crc_commands = {
+    "QT",
+    "QPRTL",
+    "HSTS",
+    "HGRID",
+    "HOP",
+    "HBAT",
+    "HPV",
+    "HIMSG1",
+    "HEEP1",
+    "HTEMP",
+    "HGEN"
+  };
+
+  return no_crc_commands.find(cmd) == no_crc_commands.end();
 }
 
 // send next command used
