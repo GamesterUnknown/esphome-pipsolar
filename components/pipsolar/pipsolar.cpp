@@ -61,7 +61,7 @@ void Pipsolar::loop() {
         this->command_queue_position_ = (command_queue_position_ + 1) % COMMAND_QUEUE_LENGTH;
         this->state_ = STATE_IDLE;
       } else {        
-         ESP_LOGD(TAG, "response length for command %s is: %zu",
+        ESP_LOGD(TAG, "response length for command %s is: %zu",
                this->command_queue_[this->command_queue_position_].c_str(), this->read_pos_);        
          
          this->command_queue_[this->command_queue_position_] = std::string("");
@@ -73,7 +73,7 @@ void Pipsolar::loop() {
        this->command_queue_[this->command_queue_position_] = std::string("");
        this->command_queue_position_ = (command_queue_position_ + 1) % COMMAND_QUEUE_LENGTH;
        this->state_ = STATE_IDLE;  
-    }
+     }   
   }
 
   if (this->state_ == STATE_POLL_DECODED) {
@@ -865,7 +865,8 @@ uint8_t Pipsolar::check_incoming_length_(uint8_t length) {
 }
 
 uint8_t Pipsolar::check_incoming_crc_() {
-  uint16_t crc16;
+ uint16_t crc16;
+ if (this->answer_requires_crc_) {
   crc16 = cal_crc_half_(read_buffer_, read_pos_ - 3);
   ESP_LOGD(TAG, "checking crc on incoming message");
   if (((uint8_t)((crc16) >> 8)) == read_buffer_[read_pos_ - 3] &&
@@ -879,9 +880,13 @@ uint8_t Pipsolar::check_incoming_crc_() {
   ESP_LOGD(TAG, "CRC NOK expected: %X %X but got: %X %X", ((uint8_t)((crc16) >> 8)), ((uint8_t)((crc16) &0xff)),
            read_buffer_[read_pos_ - 3], read_buffer_[read_pos_ - 2]);
   return 0;
+ } else {
+   ESP_LOGD(TAG, "No need to checking crc on incoming message");
+   return 1;
+ }
 }
 
-bool Pipsolar::command_requires_crc(const char *cmd) {
+bool Pipsolar::command_requires_crc_(const char *cmd) {
   static const std::unordered_set<std::string> no_crc_commands = {
     "QT",
     "QPRTL",
@@ -895,8 +900,8 @@ bool Pipsolar::command_requires_crc(const char *cmd) {
     "HTEMP",
     "HGEN"
   };
-
-  return no_crc_commands.find(cmd) == no_crc_commands.end();
+  this->answer_requires_crc_= (no_crc_commands.find(cmd) == no_crc_commands.end());
+  return this->answer_requires_crc_;
 }
 
 // send next command used
@@ -914,7 +919,8 @@ uint8_t Pipsolar::send_next_command_() {
     this->empty_uart_buffer_();
     this->read_pos_ = 0;
     this->write_str(command);
-    if (command_requires_crc(command)) {
+    
+    if (command_requires_crc_(command)) {
      crc16 = cal_crc_half_(byte_command, length);
      // checksum
      this->write(((uint8_t)((crc16) >> 8)));   // highbyte
