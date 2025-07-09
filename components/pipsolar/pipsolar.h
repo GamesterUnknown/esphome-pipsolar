@@ -234,7 +234,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   uint8_t check_incoming_crc_();
   uint8_t check_incoming_length_(uint8_t length);
   uint16_t cal_crc_half_(uint8_t *msg, uint8_t len);
-  bool command_requires_crc(const char *cmd);
+  bool command_requires_crc_(const char *cmd);
   uint8_t send_next_command_();
   void send_next_poll_();
   void queue_command_(const char *command, uint8_t length);
@@ -242,7 +242,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   uint8_t command_queue_position_ = 0;
   uint8_t read_buffer_[PIPSOLAR_READ_BUFFER_LENGTH];
   size_t read_pos_{0};
-
+  bool answer_requires_crc_=true;
   uint32_t command_start_millis_ = 0;
   uint8_t state_;
   enum State {
