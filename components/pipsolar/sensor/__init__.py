@@ -22,6 +22,12 @@ from .. import CONF_PIPSOLAR_ID, PIPSOLAR_COMPONENT_SCHEMA
 
 DEPENDENCIES = ["uart"]
 
+# HGEN sensors
+CONF_PV_GEN_CURRENT_DAY = "pv_gen_current_day"
+CONF_PV_GEN_CURRENT_MONTH = "pv_gen_current_month"
+CONF_PV_GEN_CURRENT_YEAR = "pv_gen_current_year"
+CONF_PV_GEN_TOTAL = "pv_gen_total"
+
 # QPIRI sensors
 CONF_GRID_RATING_VOLTAGE = "grid_rating_voltage"
 CONF_GRID_RATING_CURRENT = "grid_rating_current"
@@ -80,6 +86,30 @@ CONF_PV2_CHARGING_POWER = "pv2_charging_power"
 
 
 TYPES = {
+    CONF_PV_GEN_CURRENT_DAY: sensor.sensor_schema(
+        unit_of_measurement="kWh",
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_ENERGY,
+        state_class=STATE_CLASS_TOTAL_INCREASING,
+    ),
+    CONF_PV_GEN_CURRENT_MONTH: sensor.sensor_schema(
+        unit_of_measurement="kWh",
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_ENERGY,
+        state_class=STATE_CLASS_TOTAL_INCREASING,
+    ),
+    CONF_PV_GEN_CURRENT_YEAR: sensor.sensor_schema(
+        unit_of_measurement="kWh",
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_ENERGY,
+        state_class=STATE_CLASS_TOTAL_INCREASING,
+    ),
+    CONF_PV_GEN_TOTAL: sensor.sensor_schema(
+        unit_of_measurement="kWh",
+        accuracy_decimals=1,
+        device_class=DEVICE_CLASS_ENERGY,
+        state_class=STATE_CLASS_TOTAL_INCREASING,
+    ),
     CONF_GRID_RATING_VOLTAGE: sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
         accuracy_decimals=1,
