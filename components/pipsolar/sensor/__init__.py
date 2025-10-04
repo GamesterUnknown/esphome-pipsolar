@@ -17,13 +17,14 @@ from esphome.const import (
     UNIT_VOLT,
     UNIT_VOLT_AMPS,
     UNIT_WATT,
-    UNIT_KILOWATT_HOUR,  
     STATE_CLASS_TOTAL_INCREASING, 
 )
 
 from .. import CONF_PIPSOLAR_ID, PIPSOLAR_COMPONENT_SCHEMA
 
 DEPENDENCIES = ["uart"]
+
+UNIT_KILOWATT_HOUR = "kWh"
 
 # HGEN sensors
 CONF_PV_GEN_CURRENT_DAY = "pv_gen_current_day"
