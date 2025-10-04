@@ -24,6 +24,7 @@ enum ENUMPollingCommand {
   POLLING_QT = 6,
   POLLING_QMN = 7,
   POLLING_QBATCD = 8,
+  POLLING_HGEN = 9,
 };
 struct PollingCommand {
   uint8_t *command;
@@ -69,6 +70,14 @@ struct PollingCommand {
 #define PIPSOLAR_TEXT_SENSOR(name, polling_command) PIPSOLAR_ENTITY_(text_sensor::TextSensor, name, polling_command)
 
 class Pipsolar : public uart::UARTDevice, public PollingComponent {
+  //HGEN values
+  PIPSOLAR_TEXT_SENSOR(current_data_time, HGEN)
+  PIPSOLAR_SENSOR(pv_gen_current_day, HGEN, float)
+  PIPSOLAR_SENSOR(pv_gen_current_month, HGEN, float)
+  PIPSOLAR_SENSOR(pv_gen_current_yer, HGEN, float)
+  PIPSOLAR_SENSOR(pv_gen_total, HGEN, float)
+
+
   // QPIGS values
   PIPSOLAR_SENSOR(grid_voltage, QPIGS, float)
   PIPSOLAR_SENSOR(grid_frequency, QPIGS, float)
