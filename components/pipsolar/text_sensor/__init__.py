@@ -16,8 +16,20 @@ CONF_LAST_QPIWS = "last_qpiws"
 CONF_LAST_QT = "last_qt"
 CONF_LAST_QMN = "last_qmn"
 CONF_LAST_QBATCD = "last_qbatcd"
-CONF_CUSTOM_COMMAND="last_custom_command"
+CONF_CUSTOM_COMMAND = "last_custom_command"
 CONF_CURRENT_DATA_TIME = "current_data_time"
+CONF_LAST_HGEN = "last_hgen"
+CONF_INVERTER_DATE = "inverter_date"
+CONF_INVERTER_TIME = "inverter_time"
+CONF_LAST_QPGS0 = "last_qpgs0"
+CONF_LAST_QET = "last_qet"
+CONF_LAST_QLT = "last_qlt"
+CONF_LAST_QMCHGCR = "last_qmchgcr"
+CONF_LAST_QMUCHGCR = "last_qmuchgcr"
+CONF_LAST_Q1 = "last_q1"
+CONF_LAST_QBMS = "last_qbms"
+CONF_WORK_MODE_0 = "work_mode_0"
+CONF_INVERTER_CHARGE_STATUS = "inverter_charge_status"
 
 TYPES = [
     CONF_DEVICE_MODE,
@@ -33,7 +45,19 @@ TYPES = [
 #    CONF_LAST_MUCHGC,
 #    CONF_LAST_MCHGC,
     CONF_CUSTOM_COMMAND,
-    CONF_CURRENT_DATA_TIME
+    CONF_CURRENT_DATA_TIME,
+    CONF_LAST_HGEN,
+    CONF_INVERTER_DATE,
+    CONF_INVERTER_TIME,
+    CONF_LAST_QPGS0,
+    CONF_LAST_QET,
+    CONF_LAST_QLT,
+    CONF_LAST_QMCHGCR,
+    CONF_LAST_QMUCHGCR,
+    CONF_LAST_Q1,
+    CONF_LAST_QBMS,
+    CONF_WORK_MODE_0,
+    CONF_INVERTER_CHARGE_STATUS,
 ]
 
 CONFIG_SCHEMA = PIPSOLAR_COMPONENT_SCHEMA.extend(
