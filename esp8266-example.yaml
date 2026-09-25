@@ -319,6 +319,16 @@ binary_sensor:
       name: "${name} over_temperature_restart_function"
 #    backlight_on:
 #      name: "${name} backlight_on"
+#    warning_battery_weak:
+#      name: "${name} warning_battery_weak"
+#    discharge_onoff:
+#      name: "${name} discharge_onoff"
+#    discharge_with_standby_onoff:
+#      name: "${name} discharge_with_standby_onoff"
+#    charge_onoff:
+#      name: "${name} charge_onoff"
+#    solar_feed_to_grid_status:
+#      name: "${name} solar_feed_to_grid_status"
 
 switch:
   - platform: pipsolar
@@ -335,6 +345,24 @@ switch:
       name: "${name} pv_ok_condition_for_parallel"
     pv_power_balance:
       name: "${name} pv_power_balance"
+    buzzer:
+      name: "${name} buzzer"
+    overload_bypass:
+      name: "${name} overload_bypass"
+    lcd_escape_to_default:
+      name: "${name} lcd_escape_to_default"
+    overload_restart:
+      name: "${name} overload_restart"
+    over_temperature_restart:
+      name: "${name} over_temperature_restart"
+    backlight:
+      name: "${name} backlight"
+    alarm_on_primary_source_interrupt:
+      name: "${name} alarm_on_primary_source_interrupt"
+    fault_code_record:
+      name: "${name} fault_code_record"
+    power_saving:
+      name: "${name} power_saving"
 
 output:
   - platform: pipsolar

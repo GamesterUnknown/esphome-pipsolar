@@ -201,11 +201,13 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   PIPSOLAR_BINARY_SENSOR(warnung_low_pv_energy, QPIWS, bool)
   PIPSOLAR_BINARY_SENSOR(warning_high_ac_input_during_bus_soft_start, QPIWS, bool)
   PIPSOLAR_BINARY_SENSOR(warning_battery_equalization, QPIWS, bool)
+  PIPSOLAR_BINARY_SENSOR(warning_battery_weak, QPIWS, bool)
 
   // QBATCD values
   PIPSOLAR_BINARY_SENSOR(discharge_onoff, QBATCD, bool)
   PIPSOLAR_BINARY_SENSOR(discharge_with_standby_onoff, QBATCD, bool)
   PIPSOLAR_BINARY_SENSOR(charge_onoff, QBATCD, bool)
+  PIPSOLAR_BINARY_SENSOR(solar_feed_to_grid_status, QBATCD, bool)
 
   PIPSOLAR_TEXT_SENSOR(last_qpigs, QPIGS)
   PIPSOLAR_TEXT_SENSOR(last_qpigs2, QPIGS2)
@@ -291,6 +293,15 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   PIPSOLAR_SWITCH(input_voltage_range_switch, QPIRI)
   PIPSOLAR_SWITCH(pv_ok_condition_for_parallel_switch, QPIRI)
   PIPSOLAR_SWITCH(pv_power_balance_switch, QPIRI)
+  PIPSOLAR_SWITCH(buzzer_switch, QFLAG)
+  PIPSOLAR_SWITCH(overload_bypass_switch, QFLAG)
+  PIPSOLAR_SWITCH(lcd_escape_to_default_switch, QFLAG)
+  PIPSOLAR_SWITCH(overload_restart_switch, QFLAG)
+  PIPSOLAR_SWITCH(over_temperature_restart_switch, QFLAG)
+  PIPSOLAR_SWITCH(backlight_switch, QFLAG)
+  PIPSOLAR_SWITCH(alarm_on_primary_source_interrupt_switch, QFLAG)
+  PIPSOLAR_SWITCH(fault_code_record_switch, QFLAG)
+  PIPSOLAR_SWITCH(power_saving_switch, QFLAG)
 
   PIPSOLAR_SELECT(output_source_priority_select, QPIRI)
   PIPSOLAR_SELECT(charger_source_priority_select, QPIRI)

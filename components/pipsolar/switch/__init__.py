@@ -20,6 +20,15 @@ TYPES = {
     CONF_INPUT_VOLTAGE_RANGE: ("PGR01", "PGR00"),
     CONF_PV_OK_CONDITION_FOR_PARALLEL: ("PPVOKC1", "PPVOKC0"),
     CONF_PV_POWER_BALANCE: ("PSPB1", "PSPB0"),
+    "buzzer": ("PEa", "PDa"),
+    "overload_bypass": ("PEb", "PDb"),
+    "lcd_escape_to_default": ("PEk", "PDk"),
+    "overload_restart": ("PEu", "PDu"),
+    "over_temperature_restart": ("PEv", "PDv"),
+    "backlight": ("PEx", "PDx"),
+    "alarm_on_primary_source_interrupt": ("PEy", "PDy"),
+    "fault_code_record": ("PEz", "PDz"),
+    "power_saving": ("PEj", "PDj"),
 }
 
 PipsolarSwitch = pipsolar_ns.class_("PipsolarSwitch", switch.Switch, cg.Component)

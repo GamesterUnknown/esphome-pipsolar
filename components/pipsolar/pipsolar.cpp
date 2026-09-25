@@ -322,29 +322,56 @@ void Pipsolar::loop() {
         if (this->silence_buzzer_open_buzzer_) {
           this->silence_buzzer_open_buzzer_->publish_state(value_silence_buzzer_open_buzzer_);
         }
+        if (this->buzzer_switch_) {
+          this->buzzer_switch_->publish_state(value_silence_buzzer_open_buzzer_);
+        }
         if (this->overload_bypass_function_) {
           this->overload_bypass_function_->publish_state(value_overload_bypass_function_);
+        }
+        if (this->overload_bypass_switch_) {
+          this->overload_bypass_switch_->publish_state(value_overload_bypass_function_);
         }
         if (this->lcd_escape_to_default_) {
           this->lcd_escape_to_default_->publish_state(value_lcd_escape_to_default_);
         }
+        if (this->lcd_escape_to_default_switch_) {
+          this->lcd_escape_to_default_switch_->publish_state(value_lcd_escape_to_default_);
+        }
         if (this->overload_restart_function_) {
           this->overload_restart_function_->publish_state(value_overload_restart_function_);
+        }
+        if (this->overload_restart_switch_) {
+          this->overload_restart_switch_->publish_state(value_overload_restart_function_);
         }
         if (this->over_temperature_restart_function_) {
           this->over_temperature_restart_function_->publish_state(value_over_temperature_restart_function_);
         }
+        if (this->over_temperature_restart_switch_) {
+          this->over_temperature_restart_switch_->publish_state(value_over_temperature_restart_function_);
+        }
         if (this->backlight_on_) {
           this->backlight_on_->publish_state(value_backlight_on_);
+        }
+        if (this->backlight_switch_) {
+          this->backlight_switch_->publish_state(value_backlight_on_);
         }
         if (this->alarm_on_when_primary_source_interrupt_) {
           this->alarm_on_when_primary_source_interrupt_->publish_state(value_alarm_on_when_primary_source_interrupt_);
         }
+        if (this->alarm_on_primary_source_interrupt_switch_) {
+          this->alarm_on_primary_source_interrupt_switch_->publish_state(value_alarm_on_when_primary_source_interrupt_);
+        }
         if (this->fault_code_record_) {
           this->fault_code_record_->publish_state(value_fault_code_record_);
         }
+        if (this->fault_code_record_switch_) {
+          this->fault_code_record_switch_->publish_state(value_fault_code_record_);
+        }
         if (this->power_saving_) {
           this->power_saving_->publish_state(value_power_saving_);
+        }
+        if (this->power_saving_switch_) {
+          this->power_saving_switch_->publish_state(value_power_saving_);
         }
         this->state_ = STATE_IDLE;
         break;
@@ -458,6 +485,9 @@ void Pipsolar::loop() {
         if (this->warning_battery_equalization_) {
           this->warning_battery_equalization_->publish_state(value_warning_battery_equalization_);
         }
+        if (this->warning_battery_weak_) {
+          this->warning_battery_weak_->publish_state(value_warning_battery_weak_);
+        }
         this->state_ = STATE_IDLE;
         break;
       case POLLING_QBATCD:
@@ -469,6 +499,9 @@ void Pipsolar::loop() {
         }
         if (this->charge_onoff_) {
           this->charge_onoff_->publish_state(value_charge_onoff_);
+        }
+        if (this->solar_feed_to_grid_status_) {
+          this->solar_feed_to_grid_status_->publish_state(value_solar_feed_to_grid_status_);
         }
         if (this->charging_discharging_control_select_) {
           this->charging_discharging_control_select_->map_and_publish(value_charging_discharging_control_select_);
@@ -927,6 +960,10 @@ void Pipsolar::loop() {
               this->value_warning_battery_equalization_ = enabled;
               this->value_warnings_present_ += enabled;
               break;
+            case 37:
+              this->value_warning_battery_weak_ = enabled;
+              this->value_warnings_present_ += enabled;
+              break;
           }
         }
         if (this->last_qpiws_) {
@@ -978,6 +1015,9 @@ void Pipsolar::loop() {
               break;
             case 3:
               this->value_charge_onoff_ = enabled;
+              break;
+            case 4:
+              this->value_solar_feed_to_grid_status_ = enabled;
               break;
           }
         }
