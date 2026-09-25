@@ -474,7 +474,187 @@ void Pipsolar::loop() {
           this->charging_discharging_control_select_->map_and_publish(value_charging_discharging_control_select_);
         }
         this->state_ = STATE_IDLE;
-        break;   
+        break;
+      case POLLING_HGEN:
+        if (this->pv_gen_current_day_) {
+          this->pv_gen_current_day_->publish_state(value_pv_gen_current_day_);
+        }
+        if (this->pv_gen_current_month_) {
+          this->pv_gen_current_month_->publish_state(value_pv_gen_current_month_);
+        }
+        if (this->pv_gen_current_yer_) {
+          this->pv_gen_current_yer_->publish_state(value_pv_gen_current_yer_);
+        }
+        if (this->pv_gen_total_) {
+          this->pv_gen_total_->publish_state(value_pv_gen_total_);
+        }
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_QET:
+        if (this->total_pv_generated_energy_) {
+          this->total_pv_generated_energy_->publish_state(value_total_pv_generated_energy_);
+        }
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_QLT:
+        if (this->total_output_load_energy_) {
+          this->total_output_load_energy_->publish_state(value_total_output_load_energy_);
+        }
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_Q1:
+        if (this->time_until_absorb_charging_) {
+          this->time_until_absorb_charging_->publish_state(value_time_until_absorb_charging_);
+        }
+        if (this->time_until_float_charging_) {
+          this->time_until_float_charging_->publish_state(value_time_until_float_charging_);
+        }
+        if (this->scc_flag_) {
+          this->scc_flag_->publish_state(value_scc_flag_);
+        }
+        if (this->allow_scc_on_) {
+          this->allow_scc_on_->publish_state(value_allow_scc_on_);
+        }
+        if (this->charge_average_current_) {
+          this->charge_average_current_->publish_state(value_charge_average_current_);
+        }
+        if (this->scc_pwm_temperature_) {
+          this->scc_pwm_temperature_->publish_state(value_scc_pwm_temperature_);
+        }
+        if (this->inverter_temperature_) {
+          this->inverter_temperature_->publish_state(value_inverter_temperature_);
+        }
+        if (this->battery_temperature_) {
+          this->battery_temperature_->publish_state(value_battery_temperature_);
+        }
+        if (this->transformer_temperature_) {
+          this->transformer_temperature_->publish_state(value_transformer_temperature_);
+        }
+        if (this->fan_lock_status_) {
+          this->fan_lock_status_->publish_state(value_fan_lock_status_);
+        }
+        if (this->fan_pwm_speed_) {
+          this->fan_pwm_speed_->publish_state(value_fan_pwm_speed_);
+        }
+        if (this->scc_charge_power_) {
+          this->scc_charge_power_->publish_state(value_scc_charge_power_);
+        }
+        if (this->parallel_warning_) {
+          this->parallel_warning_->publish_state(value_parallel_warning_);
+        }
+        if (this->sync_frequency_) {
+          this->sync_frequency_->publish_state(value_sync_frequency_);
+        }
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_QPGS0:
+        if (this->parallel_num_0_) {
+          this->parallel_num_0_->publish_state(value_parallel_num_0_);
+        }
+        if (this->serial_number_0_) {
+          this->serial_number_0_->publish_state(value_serial_number_0_);
+        }
+        if (this->fault_code_0_) {
+          this->fault_code_0_->publish_state(value_fault_code_0_);
+        }
+        if (this->grid_voltage_0_) {
+          this->grid_voltage_0_->publish_state(value_grid_voltage_0_);
+        }
+        if (this->grid_frequency_0_) {
+          this->grid_frequency_0_->publish_state(value_grid_frequency_0_);
+        }
+        if (this->ac_output_voltage_0_) {
+          this->ac_output_voltage_0_->publish_state(value_ac_output_voltage_0_);
+        }
+        if (this->ac_output_frequency_0_) {
+          this->ac_output_frequency_0_->publish_state(value_ac_output_frequency_0_);
+        }
+        if (this->ac_output_apparent_power_0_) {
+          this->ac_output_apparent_power_0_->publish_state(value_ac_output_apparent_power_0_);
+        }
+        if (this->ac_output_active_power_0_) {
+          this->ac_output_active_power_0_->publish_state(value_ac_output_active_power_0_);
+        }
+        if (this->load_percent_0_) {
+          this->load_percent_0_->publish_state(value_load_percent_0_);
+        }
+        if (this->battery_voltage_0_) {
+          this->battery_voltage_0_->publish_state(value_battery_voltage_0_);
+        }
+        if (this->battery_charging_current_0_) {
+          this->battery_charging_current_0_->publish_state(value_battery_charging_current_0_);
+        }
+        if (this->battery_capacity_0_) {
+          this->battery_capacity_0_->publish_state(value_battery_capacity_0_);
+        }
+        if (this->pv1_input_voltage_0_) {
+          this->pv1_input_voltage_0_->publish_state(value_pv1_input_voltage_0_);
+        }
+        if (this->total_charging_current_0_) {
+          this->total_charging_current_0_->publish_state(value_total_charging_current_0_);
+        }
+        if (this->total_ac_output_apparent_power_0_) {
+          this->total_ac_output_apparent_power_0_->publish_state(value_total_ac_output_apparent_power_0_);
+        }
+        if (this->total_output_active_power_0_) {
+          this->total_output_active_power_0_->publish_state(value_total_output_active_power_0_);
+        }
+        if (this->total_ac_output_percentage_0_) {
+          this->total_ac_output_percentage_0_->publish_state(value_total_ac_output_percentage_0_);
+        }
+        if (this->inverter_status_scc_0_) {
+          this->inverter_status_scc_0_->publish_state(value_inverter_status_scc_0_);
+        }
+        if (this->inverter_status_ac_charging_0_) {
+          this->inverter_status_ac_charging_0_->publish_state(value_inverter_status_ac_charging_0_);
+        }
+        if (this->inverter_status_scc_charging_0_) {
+          this->inverter_status_scc_charging_0_->publish_state(value_inverter_status_scc_charging_0_);
+        }
+        if (this->inverter_status_battery_0_) {
+          this->inverter_status_battery_0_->publish_state(value_inverter_status_battery_0_);
+        }
+        if (this->inverter_status_line_0_) {
+          this->inverter_status_line_0_->publish_state(value_inverter_status_line_0_);
+        }
+        if (this->inverter_status_load_0_) {
+          this->inverter_status_load_0_->publish_state(value_inverter_status_load_0_);
+        }
+        if (this->inverter_status_configuration_0_) {
+          this->inverter_status_configuration_0_->publish_state(value_inverter_status_configuration_0_);
+        }
+        if (this->output_mode_0_) {
+          this->output_mode_0_->publish_state(value_output_mode_0_);
+        }
+        if (this->charger_source_priority_0_) {
+          this->charger_source_priority_0_->publish_state(value_charger_source_priority_0_);
+        }
+        if (this->max_charger_current_0_) {
+          this->max_charger_current_0_->publish_state(value_max_charger_current_0_);
+        }
+        if (this->max_charger_range_0_) {
+          this->max_charger_range_0_->publish_state(value_max_charger_range_0_);
+        }
+        if (this->max_ac_charger_current_0_) {
+          this->max_ac_charger_current_0_->publish_state(value_max_ac_charger_current_0_);
+        }
+        if (this->pv1_input_current_0_) {
+          this->pv1_input_current_0_->publish_state(value_pv1_input_current_0_);
+        }
+        if (this->battery_discharge_current_0_) {
+          this->battery_discharge_current_0_->publish_state(value_battery_discharge_current_0_);
+        }
+        if (this->pv2_input_voltage_0_) {
+          this->pv2_input_voltage_0_->publish_state(value_pv2_input_voltage_0_);
+        }
+        if (this->pv2_input_current_0_) {
+          this->pv2_input_current_0_->publish_state(value_pv2_input_current_0_);
+        }
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_QBMS:
+      case POLLING_QMCHGCR:
+      case POLLING_QMUCHGCR:
       case POLLING_QT:
       case POLLING_QMN:
         this->state_ = STATE_IDLE;
@@ -791,6 +971,95 @@ void Pipsolar::loop() {
         }
         this->state_ = STATE_POLL_DECODED;
         break;
+      case POLLING_QET:
+        ESP_LOGD(TAG, "Decode QET");
+        sscanf(tmp, "(%f", &value_total_pv_generated_energy_);
+        if (this->last_qet_) {
+          this->last_qet_->publish_state(tmp);
+        }
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_QLT:
+        ESP_LOGD(TAG, "Decode QLT");
+        sscanf(tmp, "(%f", &value_total_output_load_energy_);
+        if (this->last_qlt_) {
+          this->last_qlt_->publish_state(tmp);
+        }
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_QMCHGCR:
+        ESP_LOGD(TAG, "Decode QMCHGCR");
+        if (this->last_qmchgcr_) {
+          this->last_qmchgcr_->publish_state(tmp);
+        }
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_QMUCHGCR:
+        ESP_LOGD(TAG, "Decode QMUCHGCR");
+        if (this->last_qmuchgcr_) {
+          this->last_qmuchgcr_->publish_state(tmp);
+        }
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_QBMS:
+        ESP_LOGD(TAG, "Decode QBMS");
+        if (this->last_qbms_) {
+          this->last_qbms_->publish_state(tmp);
+        }
+        if (this->bms_values_select_) {
+          this->bms_values_select_->map_and_publish(std::string(tmp));
+        }
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_Q1:
+        ESP_LOGD(TAG, "Decode Q1");
+        sscanf(tmp, "(%d %d %1d %1d %d %d %d %d %d %1d %d %d %1d %f",
+               &value_time_until_absorb_charging_, &value_time_until_float_charging_,
+               &value_scc_flag_, &value_allow_scc_on_, &value_charge_average_current_,
+               &value_scc_pwm_temperature_, &value_inverter_temperature_, &value_battery_temperature_,
+               &value_transformer_temperature_, &value_fan_lock_status_, &value_fan_pwm_speed_,
+               &value_scc_charge_power_, &value_parallel_warning_, &value_sync_frequency_);
+        if (this->last_q1_) {
+          this->last_q1_->publish_state(tmp);
+        }
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_QPGS0:
+        ESP_LOGD(TAG, "Decode QPGS0");
+        {
+          char work_mode_buf[16] = {0};
+          sscanf(tmp, "(%1d %f %15s %d %f %f %f %f %d %d %d %f %d %d %f %d %d %d %d %1d%1d%1d %d %1d%1d%1d %d %d %d %d %d %f %d %f %f",
+                 &value_parallel_num_0_, &value_serial_number_0_, work_mode_buf,
+                 &value_fault_code_0_, &value_grid_voltage_0_, &value_grid_frequency_0_,
+                 &value_ac_output_voltage_0_, &value_ac_output_frequency_0_,
+                 &value_ac_output_apparent_power_0_, &value_ac_output_active_power_0_,
+                 &value_load_percent_0_, &value_battery_voltage_0_, &value_battery_charging_current_0_,
+                 &value_battery_capacity_0_, &value_pv1_input_voltage_0_, &value_total_charging_current_0_,
+                 &value_total_ac_output_apparent_power_0_, &value_total_output_active_power_0_,
+                 &value_total_ac_output_percentage_0_, &value_inverter_status_scc_0_,
+                 &value_inverter_status_ac_charging_0_, &value_inverter_status_scc_charging_0_,
+                 &value_inverter_status_battery_0_, &value_inverter_status_line_0_,
+                 &value_inverter_status_load_0_, &value_inverter_status_configuration_0_,
+                 &value_output_mode_0_, &value_charger_source_priority_0_, &value_max_charger_current_0_,
+                 &value_max_charger_range_0_, &value_max_ac_charger_current_0_, &value_pv1_input_current_0_,
+                 &value_battery_discharge_current_0_, &value_pv2_input_voltage_0_, &value_pv2_input_current_0_);
+          if (this->work_mode_0_) {
+            this->work_mode_0_->publish_state(work_mode_buf);
+          }
+        }
+        if (this->last_qpgs0_) {
+          this->last_qpgs0_->publish_state(tmp);
+        }
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_HGEN:
+        ESP_LOGD(TAG, "Decode HGEN");
+        sscanf(tmp, "%f %f %f %f", &value_pv_gen_current_day_, &value_pv_gen_current_month_, &value_pv_gen_current_yer_, &value_pv_gen_total_);
+        if (this->current_data_time_) {
+          this->current_data_time_->publish_state(tmp);
+        }
+        this->state_ = STATE_POLL_DECODED;
+        break;
       default:
         this->state_ = STATE_IDLE;
         break;
@@ -963,7 +1232,7 @@ uint8_t Pipsolar::send_next_command_() {
 
 void Pipsolar::send_next_poll_() {
   uint16_t crc16;
-  this->last_polling_command_ = (this->last_polling_command_ + 1) % 15;
+  this->last_polling_command_ = (this->last_polling_command_ + 1) % 17;
   if (this->used_polling_commands_[this->last_polling_command_].length == 0) {
     this->last_polling_command_ = 0;
   }

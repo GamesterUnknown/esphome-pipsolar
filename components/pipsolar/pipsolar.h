@@ -24,7 +24,14 @@ enum ENUMPollingCommand {
   POLLING_QT = 6,
   POLLING_QMN = 7,
   POLLING_QBATCD = 8,
-  POLLING_HGEN = 9,
+  POLLING_QET = 9,
+  POLLING_QLT = 10,
+  POLLING_QMCHGCR = 11,
+  POLLING_QMUCHGCR = 12,
+  POLLING_QPGS0 = 13,
+  POLLING_Q1 = 14,
+  POLLING_QBMS = 15,
+  POLLING_HGEN = 16,
 };
 struct PollingCommand {
   uint8_t *command;
@@ -209,7 +216,71 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   PIPSOLAR_TEXT_SENSOR(last_qt, QT)
   PIPSOLAR_TEXT_SENSOR(last_qmn, QMN)
   PIPSOLAR_TEXT_SENSOR(last_qbatcd, QBATCD)
+  PIPSOLAR_TEXT_SENSOR(last_qpgs0, QPGS0)
+  PIPSOLAR_TEXT_SENSOR(last_qet, QET)
+  PIPSOLAR_TEXT_SENSOR(last_qlt, QLT)
+  PIPSOLAR_TEXT_SENSOR(last_qmchgcr, QMCHGCR)
+  PIPSOLAR_TEXT_SENSOR(last_qmuchgcr, QMUCHGCR)
+  PIPSOLAR_TEXT_SENSOR(last_q1, Q1)
+  PIPSOLAR_TEXT_SENSOR(last_qbms, QBMS)
   PIPSOLAR_NOPOLL_ENTITY_(text_sensor::TextSensor, last_custom_command)
+
+  PIPSOLAR_SENSOR(total_pv_generated_energy, QET, float)
+  PIPSOLAR_SENSOR(total_output_load_energy, QLT, float)
+
+  // Q1 values
+  PIPSOLAR_SENSOR(time_until_absorb_charging, Q1, int)
+  PIPSOLAR_SENSOR(time_until_float_charging, Q1, int)
+  PIPSOLAR_BINARY_SENSOR(scc_flag, Q1, int)
+  PIPSOLAR_BINARY_SENSOR(allow_scc_on, Q1, int)
+  PIPSOLAR_SENSOR(charge_average_current, Q1, int)
+  PIPSOLAR_SENSOR(scc_pwm_temperature, Q1, int)
+  PIPSOLAR_SENSOR(inverter_temperature, Q1, int)
+  PIPSOLAR_SENSOR(battery_temperature, Q1, int)
+  PIPSOLAR_SENSOR(transformer_temperature, Q1, int)
+  PIPSOLAR_BINARY_SENSOR(fan_lock_status, Q1, int)
+  PIPSOLAR_SENSOR(fan_pwm_speed, Q1, int)
+  PIPSOLAR_SENSOR(scc_charge_power, Q1, int)
+  PIPSOLAR_BINARY_SENSOR(parallel_warning, Q1, int)
+  PIPSOLAR_SENSOR(sync_frequency, Q1, float)
+  PIPSOLAR_TEXT_SENSOR(inverter_charge_status, Q1)
+
+  // QPGS0 values
+  PIPSOLAR_BINARY_SENSOR(parallel_num_0, QPGS0, int)
+  PIPSOLAR_SENSOR(serial_number_0, QPGS0, float)
+  PIPSOLAR_TEXT_SENSOR(work_mode_0, QPGS0)
+  PIPSOLAR_SENSOR(fault_code_0, QPGS0, int)
+  PIPSOLAR_SENSOR(grid_voltage_0, QPGS0, float)
+  PIPSOLAR_SENSOR(grid_frequency_0, QPGS0, float)
+  PIPSOLAR_SENSOR(ac_output_voltage_0, QPGS0, float)
+  PIPSOLAR_SENSOR(ac_output_frequency_0, QPGS0, float)
+  PIPSOLAR_SENSOR(ac_output_apparent_power_0, QPGS0, int)
+  PIPSOLAR_SENSOR(ac_output_active_power_0, QPGS0, int)
+  PIPSOLAR_SENSOR(load_percent_0, QPGS0, int)
+  PIPSOLAR_SENSOR(battery_voltage_0, QPGS0, float)
+  PIPSOLAR_SENSOR(battery_charging_current_0, QPGS0, int)
+  PIPSOLAR_SENSOR(battery_capacity_0, QPGS0, int)
+  PIPSOLAR_SENSOR(pv1_input_voltage_0, QPGS0, float)
+  PIPSOLAR_SENSOR(total_charging_current_0, QPGS0, int)
+  PIPSOLAR_SENSOR(total_ac_output_apparent_power_0, QPGS0, int)
+  PIPSOLAR_SENSOR(total_output_active_power_0, QPGS0, int)
+  PIPSOLAR_SENSOR(total_ac_output_percentage_0, QPGS0, int)
+  PIPSOLAR_BINARY_SENSOR(inverter_status_scc_0, QPGS0, int)
+  PIPSOLAR_BINARY_SENSOR(inverter_status_ac_charging_0, QPGS0, int)
+  PIPSOLAR_BINARY_SENSOR(inverter_status_scc_charging_0, QPGS0, int)
+  PIPSOLAR_SENSOR(inverter_status_battery_0, QPGS0, int)
+  PIPSOLAR_BINARY_SENSOR(inverter_status_line_0, QPGS0, int)
+  PIPSOLAR_BINARY_SENSOR(inverter_status_load_0, QPGS0, int)
+  PIPSOLAR_BINARY_SENSOR(inverter_status_configuration_0, QPGS0, int)
+  PIPSOLAR_SENSOR(output_mode_0, QPGS0, int)
+  PIPSOLAR_SENSOR(charger_source_priority_0, QPGS0, int)
+  PIPSOLAR_SENSOR(max_charger_current_0, QPGS0, int)
+  PIPSOLAR_SENSOR(max_charger_range_0, QPGS0, int)
+  PIPSOLAR_SENSOR(max_ac_charger_current_0, QPGS0, int)
+  PIPSOLAR_SENSOR(pv1_input_current_0, QPGS0, float)
+  PIPSOLAR_SENSOR(battery_discharge_current_0, QPGS0, int)
+  PIPSOLAR_SENSOR(pv2_input_voltage_0, QPGS0, float)
+  PIPSOLAR_SENSOR(pv2_input_current_0, QPGS0, float)
 
   PIPSOLAR_SWITCH(output_source_priority_utility_switch, QPIRI)
   PIPSOLAR_SWITCH(output_source_priority_solar_switch, QPIRI)
@@ -223,6 +294,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   
   PIPSOLAR_SELECT(current_max_ac_charging_current_select, QPIRI)
   PIPSOLAR_SELECT(current_max_charging_current_select, QPIRI)
+  PIPSOLAR_SELECT(bms_values_select, QBMS)
   
   PIPSOLAR_VALUED_SELECT(charging_discharging_control_select, QBATCD, std::string)
 
@@ -265,7 +337,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   };
 
   uint8_t last_polling_command_ = 0;
-  PollingCommand used_polling_commands_[15];
+  PollingCommand used_polling_commands_[20];
 };
 
 }  // namespace pipsolar
