@@ -482,8 +482,8 @@ void Pipsolar::loop() {
         if (this->pv_gen_current_month_) {
           this->pv_gen_current_month_->publish_state(value_pv_gen_current_month_);
         }
-        if (this->pv_gen_current_yer_) {
-          this->pv_gen_current_yer_->publish_state(value_pv_gen_current_yer_);
+        if (this->pv_gen_current_year_) {
+          this->pv_gen_current_year_->publish_state(value_pv_gen_current_year_);
         }
         if (this->pv_gen_total_) {
           this->pv_gen_total_->publish_state(value_pv_gen_total_);
@@ -1071,7 +1071,7 @@ void Pipsolar::loop() {
         break;
       case POLLING_HGEN:
         ESP_LOGD(TAG, "Decode HGEN");
-        sscanf(tmp, "%f %f %f %f", &value_pv_gen_current_day_, &value_pv_gen_current_month_, &value_pv_gen_current_yer_, &value_pv_gen_total_);
+        sscanf(tmp, "%f %f %f %f", &value_pv_gen_current_day_, &value_pv_gen_current_month_, &value_pv_gen_current_year_, &value_pv_gen_total_);
         if (this->last_hgen_) {
           this->last_hgen_->publish_state(tmp);
         }

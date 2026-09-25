@@ -81,7 +81,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   PIPSOLAR_TEXT_SENSOR(last_hgen, HGEN)
   PIPSOLAR_SENSOR(pv_gen_current_day, HGEN, float)
   PIPSOLAR_SENSOR(pv_gen_current_month, HGEN, float)
-  PIPSOLAR_SENSOR(pv_gen_current_yer, HGEN, float)
+  PIPSOLAR_SENSOR(pv_gen_current_year, HGEN, float)
   PIPSOLAR_SENSOR(pv_gen_total, HGEN, float)
 
 
