@@ -152,11 +152,128 @@ sensor:
     pv2_charging_power:
       name: "${name} pv2_charging_power"
 
+    # HGEN
+    pv_gen_current_day:
+      name: "${name} pv_gen_current_day"
+    pv_gen_current_month:
+      name: "${name} pv_gen_current_month"
+    pv_gen_current_year:
+      name: "${name} pv_gen_current_year"
+    pv_gen_total:
+      name: "${name} pv_gen_total"
+
+    # QET
+#    total_pv_generated_energy:
+#      name: "${name} total_pv_generated_energy"
+
+    # QLT
+#    total_output_load_energy:
+#      name: "${name} total_output_load_energy"
+
+    # QPGS0 - parallel inverter operation sensors (only for multi-inverter parallel setup)
+#    serial_number_0:
+#      name: "${name} serial_number_0"
+#    fault_code_0:
+#      name: "${name} fault_code_0"
+#    grid_voltage_0:
+#      name: "${name} grid_voltage_0"
+#    grid_frequency_0:
+#      name: "${name} grid_frequency_0"
+#    ac_output_voltage_0:
+#      name: "${name} ac_output_voltage_0"
+#    ac_output_frequency_0:
+#      name: "${name} ac_output_frequency_0"
+#    ac_output_apparent_power_0:
+#      name: "${name} ac_output_apparent_power_0"
+#    ac_output_active_power_0:
+#      name: "${name} ac_output_active_power_0"
+#    load_percent_0:
+#      name: "${name} load_percent_0"
+#    battery_voltage_0:
+#      name: "${name} battery_voltage_0"
+#    battery_charging_current_0:
+#      name: "${name} battery_charging_current_0"
+#    battery_capacity_0:
+#      name: "${name} battery_capacity_0"
+#    pv1_input_voltage_0:
+#      name: "${name} pv1_input_voltage_0"
+#    total_charging_current_0:
+#      name: "${name} total_charging_current_0"
+#    total_ac_output_apparent_power_0:
+#      name: "${name} total_ac_output_apparent_power_0"
+#    total_output_active_power_0:
+#      name: "${name} total_output_active_power_0"
+#    total_ac_output_percentage_0:
+#      name: "${name} total_ac_output_percentage_0"
+#    inverter_status_battery_0:
+#      name: "${name} inverter_status_battery_0"
+#    output_mode_0:
+#      name: "${name} output_mode_0"
+#    charger_source_priority_0:
+#      name: "${name} charger_source_priority_0"
+#    max_charger_current_0:
+#      name: "${name} max_charger_current_0"
+#    max_charger_range_0:
+#      name: "${name} max_charger_range_0"
+#    max_ac_charger_current_0:
+#      name: "${name} max_ac_charger_current_0"
+#    pv1_input_current_0:
+#      name: "${name} pv1_input_current_0"
+#    battery_discharge_current_0:
+#      name: "${name} battery_discharge_current_0"
+#    pv2_input_voltage_0:
+#      name: "${name} pv2_input_voltage_0"
+#    pv2_input_current_0:
+#      name: "${name} pv2_input_current_0"
+
+    # Q1
+#    time_until_absorb_charging:
+#      name: "${name} time_until_absorb_charging"
+#    time_until_float_charging:
+#      name: "${name} time_until_float_charging"
+#    charge_average_current:
+#      name: "${name} charge_average_current"
+#    scc_pwm_temperature:
+#      name: "${name} scc_pwm_temperature"
+#    inverter_temperature:
+#      name: "${name} inverter_temperature"
+#    battery_temperature:
+#      name: "${name} battery_temperature"
+#    transformer_temperature:
+#      name: "${name} transformer_temperature"
+#    fan_pwm_speed:
+#      name: "${name} fan_pwm_speed"
+#    scc_charge_power:
+#      name: "${name} scc_charge_power"
+#    sync_frequency:
+#      name: "${name} sync_frequency"
+
 text_sensor:
   - platform: pipsolar
     pipsolar_id: inverter0
     device_mode:
       name: "${name} device_mode"
+    last_custom_command:
+      name: "${name} last_custom_command"
+#    # QPGS0 - parallel inverter operation (raw response)
+#    last_qpgs0:
+#      name: "${name} last_qpgs0"
+#    last_qet:
+#      name: "${name} last_qet"
+#    last_qlt:
+#      name: "${name} last_qlt"
+#    last_qmchgcr:
+#      name: "${name} last_qmchgcr"
+#    last_qmuchgcr:
+#      name: "${name} last_qmuchgcr"
+#    last_q1:
+#      name: "${name} last_q1"
+#    last_qbms:
+#      name: "${name} last_qbms"
+#    work_mode_0:
+#      name: "${name} work_mode_0"
+#    inverter_charge_status:
+#      name: "${name} inverter_charge_status"
 #    last_qpigs:
 #      name: "${name} last_qpigs"
 #    last_qpiri:

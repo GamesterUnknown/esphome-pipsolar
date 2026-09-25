@@ -939,6 +939,22 @@ void Pipsolar::loop() {
         if (this->last_qt_) {
           this->last_qt_->publish_state(tmp);
         }
+        if (strlen(tmp) >= 15) {
+          // Format date: YYYY-MM-DD
+          std::string date = std::string(tmp + 1, 4) + "-" + std::string(tmp + 5, 2) + "-" + std::string(tmp + 7, 2);
+          // Format time: HH:MM:SS
+          std::string time = std::string(tmp + 9, 2) + ":" + std::string(tmp + 11, 2) + ":" + std::string(tmp + 13, 2);
+          std::string date_time = date + " " + time;
+          if (this->inverter_date_) {
+            this->inverter_date_->publish_state(date);
+          }
+          if (this->inverter_time_) {
+            this->inverter_time_->publish_state(time);
+          }
+          if (this->current_data_time_) {
+            this->current_data_time_->publish_state(date_time);
+          }
+        }
         this->state_ = STATE_POLL_DECODED;
         break;
       case POLLING_QMN:
@@ -1056,8 +1072,8 @@ void Pipsolar::loop() {
       case POLLING_HGEN:
         ESP_LOGD(TAG, "Decode HGEN");
         sscanf(tmp, "%f %f %f %f", &value_pv_gen_current_day_, &value_pv_gen_current_month_, &value_pv_gen_current_yer_, &value_pv_gen_total_);
-        if (this->current_data_time_) {
-          this->current_data_time_->publish_state(tmp);
+        if (this->last_hgen_) {
+          this->last_hgen_->publish_state(tmp);
         }
         this->state_ = STATE_POLL_DECODED;
         break;

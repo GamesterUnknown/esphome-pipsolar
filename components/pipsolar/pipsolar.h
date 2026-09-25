@@ -78,7 +78,7 @@ struct PollingCommand {
 
 class Pipsolar : public uart::UARTDevice, public PollingComponent {
   //HGEN values
-  PIPSOLAR_TEXT_SENSOR(current_data_time, HGEN)
+  PIPSOLAR_TEXT_SENSOR(last_hgen, HGEN)
   PIPSOLAR_SENSOR(pv_gen_current_day, HGEN, float)
   PIPSOLAR_SENSOR(pv_gen_current_month, HGEN, float)
   PIPSOLAR_SENSOR(pv_gen_current_yer, HGEN, float)
@@ -214,6 +214,9 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   PIPSOLAR_TEXT_SENSOR(last_qflag, QFLAG)
   PIPSOLAR_TEXT_SENSOR(last_qpiws, QPIWS)
   PIPSOLAR_TEXT_SENSOR(last_qt, QT)
+  PIPSOLAR_TEXT_SENSOR(current_data_time, QT)
+  PIPSOLAR_TEXT_SENSOR(inverter_date, QT)
+  PIPSOLAR_TEXT_SENSOR(inverter_time, QT)
   PIPSOLAR_TEXT_SENSOR(last_qmn, QMN)
   PIPSOLAR_TEXT_SENSOR(last_qbatcd, QBATCD)
   PIPSOLAR_TEXT_SENSOR(last_qpgs0, QPGS0)
