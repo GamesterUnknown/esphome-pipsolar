@@ -1111,7 +1111,7 @@ void Pipsolar::loop() {
         break;
       case POLLING_HGEN:
         ESP_LOGD(TAG, "Decode HGEN");
-        sscanf(tmp, "%f %f %f %f", &value_pv_gen_current_day_, &value_pv_gen_current_month_, &value_pv_gen_current_year_, &value_pv_gen_total_);
+        sscanf(tmp, "(%*s %*s %*f %f %f %f %f", &value_pv_gen_current_day_, &value_pv_gen_current_month_, &value_pv_gen_current_year_, &value_pv_gen_total_);
         if (this->last_hgen_) {
           this->last_hgen_->publish_state(tmp);
         }
@@ -1164,8 +1164,10 @@ void Pipsolar::loop() {
         this->read_pos_++;
 
         // end of answer
-        if (byte == 0x0D) {
-          this->read_buffer_[this->read_pos_] = 0;
+        if (byte == 0x0D || byte == 0x0A) {
+          if (this->read_pos_ > 0) {
+            this->read_buffer_[this->read_pos_ - 1] = 0;
+          }
           this->empty_uart_buffer_();
           if (this->state_ == STATE_POLL) {
             this->state_ = STATE_POLL_COMPLETE;
