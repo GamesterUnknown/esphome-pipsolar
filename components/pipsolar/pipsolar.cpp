@@ -1007,7 +1007,8 @@ void Pipsolar::loop() {
           this->last_qbms_->publish_state(tmp);
         }
         if (this->bms_values_select_) {
-          this->bms_values_select_->map_and_publish(std::string(tmp));
+          std::string bms_val = tmp;
+          this->bms_values_select_->map_and_publish(bms_val);
         }
         this->state_ = STATE_POLL_DECODED;
         break;
