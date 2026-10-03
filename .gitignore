@@ -6,6 +6,7 @@ secrets.yaml
 **/lib/
 **/src/
 **/partitions.csv
+esphome-pipsolar.code-workspace
 
 __pycache__/
 *.py[cod]
