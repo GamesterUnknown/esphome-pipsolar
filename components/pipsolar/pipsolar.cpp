@@ -685,11 +685,87 @@ void Pipsolar::loop() {
         }
         this->state_ = STATE_IDLE;
         break;
+      case POLLING_HGRID:
+        if (this->hgrid_voltage_) this->hgrid_voltage_->publish_state(value_hgrid_voltage_);
+        if (this->hgrid_frequency_) this->hgrid_frequency_->publish_state(value_hgrid_frequency_);
+        if (this->hgrid_voltage_max_) this->hgrid_voltage_max_->publish_state(value_hgrid_voltage_max_);
+        if (this->hgrid_voltage_min_) this->hgrid_voltage_min_->publish_state(value_hgrid_voltage_min_);
+        if (this->hgrid_power_max_) this->hgrid_power_max_->publish_state(value_hgrid_power_max_);
+        if (this->hgrid_power_reactive_) this->hgrid_power_reactive_->publish_state(value_hgrid_power_reactive_);
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_HOP:
+        if (this->hop_output_voltage_) this->hop_output_voltage_->publish_state(value_hop_output_voltage_);
+        if (this->hop_output_frequency_) this->hop_output_frequency_->publish_state(value_hop_output_frequency_);
+        if (this->hop_output_apparent_power_) this->hop_output_apparent_power_->publish_state(value_hop_output_apparent_power_);
+        if (this->hop_output_active_power_) this->hop_output_active_power_->publish_state(value_hop_output_active_power_);
+        if (this->hop_output_load_percent_) this->hop_output_load_percent_->publish_state(value_hop_output_load_percent_);
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_HPV:
+        if (this->hpv_voltage_) this->hpv_voltage_->publish_state(value_hpv_voltage_);
+        if (this->hpv_current_) this->hpv_current_->publish_state(value_hpv_current_);
+        if (this->hpv_power_) this->hpv_power_->publish_state(value_hpv_power_);
+        if (this->hpv_energy_today_) this->hpv_energy_today_->publish_state(value_hpv_energy_today_);
+        if (this->hpv_energy_total_) this->hpv_energy_total_->publish_state(value_hpv_energy_total_);
+        if (this->hpv_mppt_voltage_) this->hpv_mppt_voltage_->publish_state(value_hpv_mppt_voltage_);
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_HBAT:
+        if (this->hbat_voltage_) this->hbat_voltage_->publish_state(value_hbat_voltage_);
+        if (this->hbat_soc_) this->hbat_soc_->publish_state(value_hbat_soc_);
+        if (this->hbat_current_) this->hbat_current_->publish_state(value_hbat_current_);
+        if (this->hbat_power_) this->hbat_power_->publish_state(value_hbat_power_);
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_HTEMP:
+        if (this->htemp_inverter_) this->htemp_inverter_->publish_state(value_htemp_inverter_);
+        if (this->htemp_battery_) this->htemp_battery_->publish_state(value_htemp_battery_);
+        if (this->htemp_transformer_) this->htemp_transformer_->publish_state(value_htemp_transformer_);
+        if (this->htemp_pv_module_) this->htemp_pv_module_->publish_state(value_htemp_pv_module_);
+        if (this->htemp_dcdc_) this->htemp_dcdc_->publish_state(value_htemp_dcdc_);
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_HIMSG1:
+        if (this->himsg1_hardware_version_) this->himsg1_hardware_version_->publish_state(value_himsg1_hardware_version_);
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_HSTS:
+        if (this->hsts_mode_) this->hsts_mode_->publish_state(value_hsts_mode_);
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_HBMS1:
+        if (this->hbms1_discharge_limit_voltage_) this->hbms1_discharge_limit_voltage_->publish_state(value_hbms1_discharge_limit_voltage_);
+        if (this->hbms1_charge_limit_voltage_) this->hbms1_charge_limit_voltage_->publish_state(value_hbms1_charge_limit_voltage_);
+        if (this->hbms1_charge_limit_current_) this->hbms1_charge_limit_current_->publish_state(value_hbms1_charge_limit_current_);
+        if (this->hbms1_soc_) this->hbms1_soc_->publish_state(value_hbms1_soc_);
+        if (this->hbms1_charging_current_) this->hbms1_charging_current_->publish_state(value_hbms1_charging_current_);
+        if (this->hbms1_discharge_current_) this->hbms1_discharge_current_->publish_state(value_hbms1_discharge_current_);
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_HBMS2:
+        if (this->hbms2_max_cell_voltage_) this->hbms2_max_cell_voltage_->publish_state(value_hbms2_max_cell_voltage_);
+        if (this->hbms2_max_cell_position_) this->hbms2_max_cell_position_->publish_state(value_hbms2_max_cell_position_);
+        if (this->hbms2_min_cell_voltage_) this->hbms2_min_cell_voltage_->publish_state(value_hbms2_min_cell_voltage_);
+        if (this->hbms2_min_cell_position_) this->hbms2_min_cell_position_->publish_state(value_hbms2_min_cell_position_);
+        this->state_ = STATE_IDLE;
+        break;
+      case POLLING_HPVB:
+        if (this->hpvb_pv_voltage_) this->hpvb_pv_voltage_->publish_state(value_hpvb_pv_voltage_);
+        if (this->hpvb_pv_current_) this->hpvb_pv_current_->publish_state(value_hpvb_pv_current_);
+        if (this->hpvb_pv_power_) this->hpvb_pv_power_->publish_state(value_hpvb_pv_power_);
+        if (this->hpvb_bus_voltage_) this->hpvb_bus_voltage_->publish_state(value_hpvb_bus_voltage_);
+        this->state_ = STATE_IDLE;
+        break;
       case POLLING_QBMS:
       case POLLING_QMCHGCR:
       case POLLING_QMUCHGCR:
       case POLLING_QT:
       case POLLING_QMN:
+      case POLLING_HEEP1:
+      case POLLING_QPRTL:
+      case POLLING_HBMS3:
+      case POLLING_HEEP2:
         this->state_ = STATE_IDLE;
         break;
     }
@@ -1360,8 +1436,6 @@ uint8_t Pipsolar::check_incoming_crc_() {
 
 bool Pipsolar::command_requires_crc_(const char *cmd) {
   static const std::unordered_set<std::string> no_crc_commands = {
-    "QT",
-    "QPRTL",
     "HSTS",
     "HGRID",
     "HOP",
