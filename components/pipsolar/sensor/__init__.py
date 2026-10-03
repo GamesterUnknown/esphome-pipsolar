@@ -90,6 +90,48 @@ CONF_PV2_INPUT_CURRENT = "pv2_input_current"
 CONF_PV2_INPUT_VOLTAGE = "pv2_input_voltage"
 CONF_PV2_CHARGING_POWER = "pv2_charging_power"
 
+# HGRID sensors
+CONF_HGRID_VOLTAGE = "hgrid_voltage"
+CONF_HGRID_FREQUENCY = "hgrid_frequency"
+CONF_HGRID_VOLTAGE_MAX = "hgrid_voltage_max"
+CONF_HGRID_VOLTAGE_MIN = "hgrid_voltage_min"
+CONF_HGRID_POWER_MAX = "hgrid_power_max"
+CONF_HGRID_POWER_REACTIVE = "hgrid_power_reactive"
+
+# HOP sensors
+CONF_HOP_OUTPUT_VOLTAGE = "hop_output_voltage"
+CONF_HOP_OUTPUT_FREQUENCY = "hop_output_frequency"
+CONF_HOP_OUTPUT_APPARENT_POWER = "hop_output_apparent_power"
+CONF_HOP_OUTPUT_ACTIVE_POWER = "hop_output_active_power"
+CONF_HOP_OUTPUT_LOAD_PERCENT = "hop_output_load_percent"
+
+# HPV sensors
+CONF_HPV_VOLTAGE = "hpv_voltage"
+CONF_HPV_CURRENT = "hpv_current"
+CONF_HPV_POWER = "hpv_power"
+CONF_HPV_ENERGY_TODAY = "hpv_energy_today"
+CONF_HPV_ENERGY_TOTAL = "hpv_energy_total"
+CONF_HPV_MPPT_VOLTAGE = "hpv_mppt_voltage"
+
+# HBAT sensors
+CONF_HBAT_VOLTAGE = "hbat_voltage"
+CONF_HBAT_SOC = "hbat_soc"
+CONF_HBAT_CURRENT_DIRECTION = "hbat_current_direction"
+CONF_HBAT_CURRENT = "hbat_current"
+CONF_HBAT_POWER = "hbat_power"
+
+# HTEMP sensors
+CONF_HTEMP_INVERTER = "htemp_inverter"
+CONF_HTEMP_BATTERY = "htemp_battery"
+CONF_HTEMP_TRANSFORMER = "htemp_transformer"
+CONF_HTEMP_PV_MODULE = "htemp_pv_module"
+CONF_HTEMP_DCDC = "htemp_dcdc"
+
+# HIMSG1
+CONF_HIMSG1_HARDWARE_VERSION = "himsg1_hardware_version"
+
+# HSTS
+CONF_HSTS_MODE = "hsts_mode"
 
 TYPES = {
     CONF_PV_GEN_CURRENT_DAY: sensor.sensor_schema(
@@ -410,6 +452,59 @@ TYPES = {
     "battery_discharge_current_0": sensor.sensor_schema(unit_of_measurement=UNIT_AMPERE, accuracy_decimals=1, device_class=DEVICE_CLASS_CURRENT),
     "pv2_input_voltage_0": sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE),
     "pv2_input_current_0": sensor.sensor_schema(unit_of_measurement=UNIT_AMPERE, accuracy_decimals=1, device_class=DEVICE_CLASS_CURRENT),
+    # HGRID
+    CONF_HGRID_VOLTAGE: sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HGRID_FREQUENCY: sensor.sensor_schema(unit_of_measurement=UNIT_HERTZ, accuracy_decimals=1, device_class=DEVICE_CLASS_FREQUENCY, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HGRID_VOLTAGE_MAX: sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HGRID_VOLTAGE_MIN: sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HGRID_POWER_MAX: sensor.sensor_schema(unit_of_measurement=UNIT_WATT, accuracy_decimals=0, device_class=DEVICE_CLASS_POWER, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HGRID_POWER_REACTIVE: sensor.sensor_schema(unit_of_measurement="var", accuracy_decimals=0, state_class=STATE_CLASS_MEASUREMENT),
+    # HOP
+    CONF_HOP_OUTPUT_VOLTAGE: sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HOP_OUTPUT_FREQUENCY: sensor.sensor_schema(unit_of_measurement=UNIT_HERTZ, accuracy_decimals=1, device_class=DEVICE_CLASS_FREQUENCY, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HOP_OUTPUT_APPARENT_POWER: sensor.sensor_schema(unit_of_measurement=UNIT_VOLT_AMPS, accuracy_decimals=0, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HOP_OUTPUT_ACTIVE_POWER: sensor.sensor_schema(unit_of_measurement=UNIT_WATT, accuracy_decimals=0, device_class=DEVICE_CLASS_POWER, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HOP_OUTPUT_LOAD_PERCENT: sensor.sensor_schema(unit_of_measurement=UNIT_PERCENT, accuracy_decimals=0, state_class=STATE_CLASS_MEASUREMENT),
+    # HPV
+    CONF_HPV_VOLTAGE: sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HPV_CURRENT: sensor.sensor_schema(unit_of_measurement=UNIT_AMPERE, accuracy_decimals=1, device_class=DEVICE_CLASS_CURRENT, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HPV_POWER: sensor.sensor_schema(unit_of_measurement=UNIT_WATT, accuracy_decimals=0, device_class=DEVICE_CLASS_POWER, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HPV_ENERGY_TODAY: sensor.sensor_schema(unit_of_measurement="Wh", accuracy_decimals=0, device_class=DEVICE_CLASS_ENERGY, state_class=STATE_CLASS_TOTAL_INCREASING),
+    CONF_HPV_ENERGY_TOTAL: sensor.sensor_schema(unit_of_measurement="Wh", accuracy_decimals=0, device_class=DEVICE_CLASS_ENERGY, state_class=STATE_CLASS_TOTAL_INCREASING),
+    CONF_HPV_MPPT_VOLTAGE: sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    # HBAT
+    CONF_HBAT_VOLTAGE: sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HBAT_SOC: sensor.sensor_schema(unit_of_measurement=UNIT_PERCENT, accuracy_decimals=0, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HBAT_CURRENT_DIRECTION: sensor.sensor_schema(accuracy_decimals=0),
+    CONF_HBAT_CURRENT: sensor.sensor_schema(unit_of_measurement=UNIT_AMPERE, accuracy_decimals=0, device_class=DEVICE_CLASS_CURRENT, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HBAT_POWER: sensor.sensor_schema(unit_of_measurement=UNIT_WATT, accuracy_decimals=0, device_class=DEVICE_CLASS_POWER, state_class=STATE_CLASS_MEASUREMENT),
+    # HTEMP
+    CONF_HTEMP_INVERTER: sensor.sensor_schema(unit_of_measurement=UNIT_CELSIUS, accuracy_decimals=0, device_class=DEVICE_CLASS_TEMPERATURE, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HTEMP_BATTERY: sensor.sensor_schema(unit_of_measurement=UNIT_CELSIUS, accuracy_decimals=0, device_class=DEVICE_CLASS_TEMPERATURE, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HTEMP_TRANSFORMER: sensor.sensor_schema(unit_of_measurement=UNIT_CELSIUS, accuracy_decimals=0, device_class=DEVICE_CLASS_TEMPERATURE, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HTEMP_PV_MODULE: sensor.sensor_schema(unit_of_measurement=UNIT_CELSIUS, accuracy_decimals=0, device_class=DEVICE_CLASS_TEMPERATURE, state_class=STATE_CLASS_MEASUREMENT),
+    CONF_HTEMP_DCDC: sensor.sensor_schema(unit_of_measurement=UNIT_CELSIUS, accuracy_decimals=0, device_class=DEVICE_CLASS_TEMPERATURE, state_class=STATE_CLASS_MEASUREMENT),
+    # HIMSG1
+    CONF_HIMSG1_HARDWARE_VERSION: sensor.sensor_schema(accuracy_decimals=0),
+    # HSTS
+    CONF_HSTS_MODE: sensor.sensor_schema(accuracy_decimals=0),
+    # HBMS1
+    "hbms1_discharge_limit_voltage": sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    "hbms1_charge_limit_voltage": sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    "hbms1_charge_limit_current": sensor.sensor_schema(unit_of_measurement=UNIT_AMPERE, accuracy_decimals=1, device_class=DEVICE_CLASS_CURRENT, state_class=STATE_CLASS_MEASUREMENT),
+    "hbms1_soc": sensor.sensor_schema(unit_of_measurement=UNIT_PERCENT, accuracy_decimals=0, state_class=STATE_CLASS_MEASUREMENT),
+    "hbms1_charging_current": sensor.sensor_schema(unit_of_measurement=UNIT_AMPERE, accuracy_decimals=1, device_class=DEVICE_CLASS_CURRENT, state_class=STATE_CLASS_MEASUREMENT),
+    "hbms1_discharge_current": sensor.sensor_schema(unit_of_measurement=UNIT_AMPERE, accuracy_decimals=1, device_class=DEVICE_CLASS_CURRENT, state_class=STATE_CLASS_MEASUREMENT),
+    # HBMS2
+    "hbms2_max_cell_voltage": sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=3, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    "hbms2_max_cell_position": sensor.sensor_schema(accuracy_decimals=0),
+    "hbms2_min_cell_voltage": sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=3, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    "hbms2_min_cell_position": sensor.sensor_schema(accuracy_decimals=0),
+    # HPVB
+    "hpvb_pv_voltage": sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
+    "hpvb_pv_current": sensor.sensor_schema(unit_of_measurement=UNIT_AMPERE, accuracy_decimals=1, device_class=DEVICE_CLASS_CURRENT, state_class=STATE_CLASS_MEASUREMENT),
+    "hpvb_pv_power": sensor.sensor_schema(unit_of_measurement=UNIT_WATT, accuracy_decimals=0, device_class=DEVICE_CLASS_POWER, state_class=STATE_CLASS_MEASUREMENT),
+    "hpvb_bus_voltage": sensor.sensor_schema(unit_of_measurement=UNIT_VOLT, accuracy_decimals=1, device_class=DEVICE_CLASS_VOLTAGE, state_class=STATE_CLASS_MEASUREMENT),
 }
 
 CONFIG_SCHEMA = PIPSOLAR_COMPONENT_SCHEMA.extend(

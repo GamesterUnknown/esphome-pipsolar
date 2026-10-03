@@ -1117,6 +1117,128 @@ void Pipsolar::loop() {
         }
         this->state_ = STATE_POLL_DECODED;
         break;
+      case POLLING_HGRID:
+        ESP_LOGD(TAG, "Decode HGRID");
+        sscanf(tmp, "(%f %f %f %f %d %d",
+               &value_hgrid_voltage_, &value_hgrid_frequency_,
+               &value_hgrid_voltage_max_, &value_hgrid_voltage_min_,
+               &value_hgrid_power_max_, &value_hgrid_power_reactive_);
+        if (this->last_hgrid_) this->last_hgrid_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_HOP:
+        ESP_LOGD(TAG, "Decode HOP");
+        sscanf(tmp, "(%f %f %d %d %d",
+               &value_hop_output_voltage_, &value_hop_output_frequency_,
+               &value_hop_output_apparent_power_, &value_hop_output_active_power_,
+               &value_hop_output_load_percent_);
+        if (this->last_hop_) this->last_hop_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_HPV:
+        ESP_LOGD(TAG, "Decode HPV");
+        sscanf(tmp, "(%f %f %d %f %f %*d %f",
+               &value_hpv_voltage_, &value_hpv_current_, &value_hpv_power_,
+               &value_hpv_energy_today_, &value_hpv_energy_total_,
+               &value_hpv_mppt_voltage_);
+        if (this->last_hpv_) this->last_hpv_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_HBAT:
+        ESP_LOGD(TAG, "Decode HBAT");
+        sscanf(tmp, "(%*d %f %d %d %d %d",
+               &value_hbat_voltage_, &value_hbat_soc_,
+               &value_hbat_current_direction_, &value_hbat_current_, &value_hbat_power_);
+        if (this->last_hbat_) this->last_hbat_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_HTEMP:
+        ESP_LOGD(TAG, "Decode HTEMP");
+        sscanf(tmp, "(%d %d %d %d %d",
+               &value_htemp_inverter_, &value_htemp_battery_, &value_htemp_transformer_,
+               &value_htemp_pv_module_, &value_htemp_dcdc_);
+        if (this->last_htemp_) this->last_htemp_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_HIMSG1: {
+        ESP_LOGD(TAG, "Decode HIMSG1");
+        char fw_buf[16] = {0};
+        char date_buf[12] = {0};
+        sscanf(tmp, "(%15s %11s %d", fw_buf, date_buf, &value_himsg1_hardware_version_);
+        if (this->himsg1_firmware_version_) this->himsg1_firmware_version_->publish_state(fw_buf);
+        if (this->himsg1_manufacture_date_) this->himsg1_manufacture_date_->publish_state(date_buf);
+        if (this->last_himsg1_) this->last_himsg1_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      }
+      case POLLING_HEEP1:
+        ESP_LOGD(TAG, "Decode HEEP1");
+        if (this->last_heep1_) this->last_heep1_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      case POLLING_HSTS: {
+        ESP_LOGD(TAG, "Decode HSTS");
+        char flags1_buf[16] = {0};
+        char flags2_buf[24] = {0};
+        sscanf(tmp, "(%d %15s %23s", &value_hsts_mode_, flags1_buf, flags2_buf);
+        if (this->hsts_flags1_) this->hsts_flags1_->publish_state(flags1_buf);
+        if (this->hsts_flags2_) this->hsts_flags2_->publish_state(flags2_buf);
+        if (this->last_hsts_) this->last_hsts_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      }
+      case POLLING_QPRTL: {
+        ESP_LOGD(TAG, "Decode QPRTL");
+        char proto_buf[16] = {0};
+        sscanf(tmp, "(%15s", proto_buf);
+        if (this->qprtl_protocol_id_) this->qprtl_protocol_id_->publish_state(proto_buf);
+        if (this->last_qprtl_) this->last_qprtl_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      }
+      case POLLING_HBMS1: {
+        ESP_LOGD(TAG, "Decode HBMS1");
+        sscanf(tmp, "(%*d %*s %f %f %f %d %f %f",
+               &value_hbms1_discharge_limit_voltage_, &value_hbms1_charge_limit_voltage_,
+               &value_hbms1_charge_limit_current_, &value_hbms1_soc_,
+               &value_hbms1_charging_current_, &value_hbms1_discharge_current_);
+        if (this->last_hbms1_) this->last_hbms1_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      }
+      case POLLING_HBMS2: {
+        ESP_LOGD(TAG, "Decode HBMS2");
+        int max_mV = 0, min_mV = 0;
+        sscanf(tmp, "(%*s %*s %*d %d %d %d %d",
+               &max_mV, &value_hbms2_max_cell_position_,
+               &min_mV, &value_hbms2_min_cell_position_);
+        value_hbms2_max_cell_voltage_ = max_mV / 1000.0f;
+        value_hbms2_min_cell_voltage_ = min_mV / 1000.0f;
+        if (this->last_hbms2_) this->last_hbms2_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      }
+      case POLLING_HBMS3: {
+        ESP_LOGD(TAG, "Decode HBMS3");
+        if (this->last_hbms3_) this->last_hbms3_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      }
+      case POLLING_HEEP2: {
+        ESP_LOGD(TAG, "Decode HEEP2");
+        if (this->last_heep2_) this->last_heep2_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      }
+      case POLLING_HPVB: {
+        ESP_LOGD(TAG, "Decode HPVB");
+        sscanf(tmp, "(%f %f %d %*d %f",
+               &value_hpvb_pv_voltage_, &value_hpvb_pv_current_,
+               &value_hpvb_pv_power_, &value_hpvb_bus_voltage_);
+        if (this->last_hpvb_) this->last_hpvb_->publish_state(tmp);
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      }
       default:
         this->state_ = STATE_IDLE;
         break;
@@ -1248,7 +1370,12 @@ bool Pipsolar::command_requires_crc_(const char *cmd) {
     "HIMSG1",
     "HEEP1",
     "HTEMP",
-    "HGEN"
+    "HGEN",
+    "HBMS1",
+    "HBMS2",
+    "HBMS3",
+    "HEEP2",
+    "HPVB"
   };
   this->answer_requires_crc_= (no_crc_commands.find(cmd) == no_crc_commands.end());
   return this->answer_requires_crc_;
@@ -1339,6 +1466,14 @@ void Pipsolar::queue_command_(const char *command, uint8_t length) {
 void Pipsolar::switch_command(const std::string &command) {
   ESP_LOGD(TAG, "got command: %s", command.c_str());
   queue_command_(command.c_str(), command.length());
+}
+
+void Pipsolar::set_inverter_system_clock(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second) {
+  char cmd_buf[32];
+  snprintf(cmd_buf, sizeof(cmd_buf), "^S???DAT%02u%02u%02u%02u%02u%02u",
+           year % 100, month, day, hour, minute, second);
+  ESP_LOGD(TAG, "Setting inverter clock: %s", cmd_buf);
+  queue_command_(cmd_buf, strlen(cmd_buf));
 }
 void Pipsolar::dump_config() {
   ESP_LOGCONFIG(TAG, "Pipsolar:");

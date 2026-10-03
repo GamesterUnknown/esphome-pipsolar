@@ -28,6 +28,72 @@ wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
 
+  on_connect:
+    - delay: 5s
+    - lambda: |-
+        if (!id(auto_sync_clock_on_wifi).state) {
+          ESP_LOGI("clock_sync", "Auto-sync disabled by switch. Skipping.");
+          return;
+        }
+        auto sys_time = id(ha_time).now();
+        if (!sys_time.is_valid()) {
+          ESP_LOGW("clock_sync", "System time is not valid, skipping auto sync.");
+          return;
+        }
+
+        std::string inv_str = id(inverter_current_data_time).state;
+        if (inv_str.length() < 19) {
+          ESP_LOGW("clock_sync", "Inverter time not available yet, performing sync.");
+          id(inverter0).set_inverter_system_clock(sys_time.year, sys_time.month, sys_time.day_of_month,
+                                                  sys_time.hour, sys_time.minute, sys_time.second);
+          return;
+        }
+
+        int i_yr, i_mo, i_dy, i_hr, i_mn, i_sc;
+        if (sscanf(inv_str.c_str(), "%d-%d-%d %d:%d:%d", &i_yr, &i_mo, &i_dy, &i_hr, &i_mn, &i_sc) == 6) {
+          struct tm inv_tm = {0};
+          inv_tm.tm_year = i_yr - 1900;
+          inv_tm.tm_mon  = i_mo - 1;
+          inv_tm.tm_mday = i_dy;
+          inv_tm.tm_hour = i_hr;
+          inv_tm.tm_min  = i_mn;
+          inv_tm.tm_sec  = i_sc;
+
+          time_t inv_epoch = mktime(&inv_tm);
+          time_t sys_epoch = sys_time.timestamp;
+
+          double diff_seconds = std::abs(difftime(sys_epoch, inv_epoch));
+          ESP_LOGI("clock_sync", "Inverter time: %s, System epoch diff: %.1f sec", inv_str.c_str(), diff_seconds);
+
+          if (diff_seconds > 30.0) {
+            ESP_LOGI("clock_sync", "Time difference > 30s detected (%.1fs). Syncing inverter clock...", diff_seconds);
+            id(inverter0).set_inverter_system_clock(sys_time.year, sys_time.month, sys_time.day_of_month,
+                                                    sys_time.hour, sys_time.minute, sys_time.second);
+          } else {
+            ESP_LOGI("clock_sync", "Inverter clock is in sync (diff <= 30s).");
+          }
+        }
+
+time:
+  - platform: homeassistant
+    id: ha_time
+
+button:
+  - platform: template
+    name: "${name} Sync Inverter Clock Now"
+    id: sync_clock_button
+    icon: "mdi:clock-check-outline"
+    on_press:
+      - lambda: |-
+          auto t = id(ha_time).now();
+          if (t.is_valid()) {
+            id(inverter0).set_inverter_system_clock(t.year, t.month, t.day_of_month, t.hour, t.minute, t.second);
+            ESP_LOGI("clock_sync", "Manual sync sent: %04d-%02d-%02d %02d:%02d:%02d",
+                     t.year, t.month, t.day_of_month, t.hour, t.minute, t.second);
+          } else {
+            ESP_LOGW("clock_sync", "Cannot sync: System time is not valid yet!");
+          }
+
 ota:
   platform: esphome
 
@@ -161,6 +227,112 @@ sensor:
     pv_gen_total:
       name: "${name} pv_gen_total"
 
+    # HGRID (HPVINV02 protocol - AC Grid parameters)
+#    hgrid_voltage:
+#      name: "${name} hgrid_voltage"
+#    hgrid_frequency:
+#      name: "${name} hgrid_frequency"
+#    hgrid_voltage_max:
+#      name: "${name} hgrid_voltage_max"
+#    hgrid_voltage_min:
+#      name: "${name} hgrid_voltage_min"
+#    hgrid_power_max:
+#      name: "${name} hgrid_power_max"
+#    hgrid_power_reactive:
+#      name: "${name} hgrid_power_reactive"
+
+    # HOP (HPVINV02 protocol - Output Power)
+#    hop_output_voltage:
+#      name: "${name} hop_output_voltage"
+#    hop_output_frequency:
+#      name: "${name} hop_output_frequency"
+#    hop_output_apparent_power:
+#      name: "${name} hop_output_apparent_power"
+#    hop_output_active_power:
+#      name: "${name} hop_output_active_power"
+#    hop_output_load_percent:
+#      name: "${name} hop_output_load_percent"
+
+    # HPV (HPVINV02 protocol - PV Input)
+#    hpv_voltage:
+#      name: "${name} hpv_voltage"
+#    hpv_current:
+#      name: "${name} hpv_current"
+#    hpv_power:
+#      name: "${name} hpv_power"
+#    hpv_energy_today:
+#      name: "${name} hpv_energy_today"
+#    hpv_energy_total:
+#      name: "${name} hpv_energy_total"
+#    hpv_mppt_voltage:
+#      name: "${name} hpv_mppt_voltage"
+
+    # HBAT (HPVINV02 protocol - Battery)
+#    hbat_voltage:
+#      name: "${name} hbat_voltage"
+#    hbat_soc:
+#      name: "${name} hbat_soc"
+#    hbat_current_direction:
+#      name: "${name} hbat_current_direction"
+#    hbat_current:
+#      name: "${name} hbat_current"
+#    hbat_power:
+#      name: "${name} hbat_power"
+
+    # HTEMP (HPVINV02 protocol - Temperatures)
+#    htemp_inverter:
+#      name: "${name} htemp_inverter"
+#    htemp_battery:
+#      name: "${name} htemp_battery"
+#    htemp_transformer:
+#      name: "${name} htemp_transformer"
+#    htemp_pv_module:
+#      name: "${name} htemp_pv_module"
+#    htemp_dcdc:
+#      name: "${name} htemp_dcdc"
+
+    # HIMSG1 (HPVINV02 protocol - Hardware info)
+#    himsg1_hardware_version:
+#      name: "${name} himsg1_hardware_version"
+
+    # HSTS (HPVINV02 protocol - Status mode)
+#    hsts_mode:
+#      name: "${name} hsts_mode"
+
+    # HBMS1 (HPVINV02 protocol - BMS Status)
+#    hbms1_discharge_limit_voltage:
+#      name: "${name} hbms1_discharge_limit_voltage"
+#    hbms1_charge_limit_voltage:
+#      name: "${name} hbms1_charge_limit_voltage"
+#    hbms1_charge_limit_current:
+#      name: "${name} hbms1_charge_limit_current"
+#    hbms1_soc:
+#      name: "${name} hbms1_soc"
+#    hbms1_charging_current:
+#      name: "${name} hbms1_charging_current"
+#    hbms1_discharge_current:
+#      name: "${name} hbms1_discharge_current"
+
+    # HBMS2 (HPVINV02 protocol - BMS Cell Summary)
+#    hbms2_max_cell_voltage:
+#      name: "${name} hbms2_max_cell_voltage"
+#    hbms2_max_cell_position:
+#      name: "${name} hbms2_max_cell_position"
+#    hbms2_min_cell_voltage:
+#      name: "${name} hbms2_min_cell_voltage"
+#    hbms2_min_cell_position:
+#      name: "${name} hbms2_min_cell_position"
+
+    # HPVB (HPVINV02 protocol - PV/Bus Telemetry)
+#    hpvb_pv_voltage:
+#      name: "${name} hpvb_pv_voltage"
+#    hpvb_pv_current:
+#      name: "${name} hpvb_pv_current"
+#    hpvb_pv_power:
+#      name: "${name} hpvb_pv_power"
+#    hpvb_bus_voltage:
+#      name: "${name} hpvb_bus_voltage"
+
     # QET
 #    total_pv_generated_energy:
 #      name: "${name} total_pv_generated_energy"
@@ -254,6 +426,80 @@ text_sensor:
       name: "${name} device_mode"
     last_custom_command:
       name: "${name} last_custom_command"
+    current_data_time:
+      name: "${name} current_data_time"
+      id: inverter_current_data_time
+
+    # HGEN (raw response)
+#    last_hgen:
+#      name: "${name} last_hgen"
+
+    # HGRID (HPVINV02 protocol - AC Grid raw)
+#    last_hgrid:
+#      name: "${name} last_hgrid"
+
+    # HOP (HPVINV02 protocol - Output Power raw)
+#    last_hop:
+#      name: "${name} last_hop"
+
+    # HPV (HPVINV02 protocol - PV Input raw)
+#    last_hpv:
+#      name: "${name} last_hpv"
+
+    # HBAT (HPVINV02 protocol - Battery raw)
+#    last_hbat:
+#      name: "${name} last_hbat"
+
+    # HTEMP (HPVINV02 protocol - Temperatures raw)
+#    last_htemp:
+#      name: "${name} last_htemp"
+
+    # HIMSG1 (HPVINV02 protocol - Hardware info)
+#    last_himsg1:
+#      name: "${name} last_himsg1"
+#    himsg1_firmware_version:
+#      name: "${name} himsg1_firmware_version"
+#    himsg1_manufacture_date:
+#      name: "${name} himsg1_manufacture_date"
+
+    # HEEP1 (HPVINV02 protocol - EEPROM config raw)
+#    last_heep1:
+#      name: "${name} last_heep1"
+
+    # HSTS (HPVINV02 protocol - Status flags)
+#    last_hsts:
+#      name: "${name} last_hsts"
+#    hsts_flags1:
+#      name: "${name} hsts_flags1"
+#    hsts_flags2:
+#      name: "${name} hsts_flags2"
+
+    # QPRTL (HPVINV02 protocol - Protocol ID)
+#    last_qprtl:
+#      name: "${name} last_qprtl"
+#    qprtl_protocol_id:
+#      name: "${name} qprtl_protocol_id"
+
+    # HBMS1 (HPVINV02 protocol - BMS Status raw)
+#    last_hbms1:
+#      name: "${name} last_hbms1"
+
+    # HBMS2 (HPVINV02 protocol - BMS Cell Summary raw)
+#    last_hbms2:
+#      name: "${name} last_hbms2"
+
+    # HBMS3 (HPVINV02 protocol - BMS Cell Voltages raw)
+#    last_hbms3:
+#      name: "${name} last_hbms3"
+
+    # HEEP2 (HPVINV02 protocol - EEPROM Config 2 raw)
+#    last_heep2:
+#      name: "${name} last_heep2"
+
+    # HPVB (HPVINV02 protocol - PV/Bus Telemetry raw)
+#    last_hpvb:
+#      name: "${name} last_hpvb"
+
 #    # QPGS0 - parallel inverter operation (raw response)
 #    last_qpgs0:
 #      name: "${name} last_qpgs0"
@@ -331,6 +577,13 @@ binary_sensor:
 #      name: "${name} solar_feed_to_grid_status"
 
 switch:
+  - platform: template
+    name: "${name} Auto Sync Clock On Wi-Fi"
+    id: auto_sync_clock_on_wifi
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_ON
+    icon: "mdi:clock-sync-outline"
+
   - platform: pipsolar
     pipsolar_id: inverter0
     output_source_priority_utility:
@@ -376,6 +629,15 @@ output:
       id: inverter0_battery_bulk_voltage_out
 
 select:
+  - platform: pipsolar
+    pipsolar_id: inverter0
+    pv_energy_feeding_priority:
+      id: inverter0_pv_energy_feeding_priority_select
+      name: "${name} PV Energy Feeding Priority"
+      optionsmap:
+        "Battery Load Utility (BLU)": "PVENGUSE00"
+        "Load Battery Utility (LBU)": "PVENGUSE01"
+
   - platform: pipsolar
     pipsolar_id: inverter0
     output_source_priority:
