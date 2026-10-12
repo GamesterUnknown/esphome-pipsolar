@@ -29,6 +29,7 @@ TYPES = {
     "alarm_on_primary_source_interrupt": ("PEy", "PDy"),
     "fault_code_record": ("PEz", "PDz"),
     "power_saving": ("PEj", "PDj"),
+    "solar_feed_to_grid": ("PEd", "PDd"),
 }
 
 PipsolarSwitch = pipsolar_ns.class_("PipsolarSwitch", switch.Switch, cg.Component)

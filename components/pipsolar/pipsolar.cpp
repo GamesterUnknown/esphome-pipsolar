@@ -11,6 +11,13 @@ static const char *const TAG = "pipsolar";
 void Pipsolar::setup() {
   this->state_ = STATE_IDLE;
   this->command_start_millis_ = 0;
+  if (this->current_data_time_ || this->inverter_date_ || this->inverter_time_) {
+    if (this->time_source_ == 0) {
+      this->add_polling_command_("QT", POLLING_QT);
+    } else {
+      this->add_polling_command_("HGEN", POLLING_HGEN);
+    }
+  }
 }
 
 void Pipsolar::empty_uart_buffer_() {
@@ -372,6 +379,12 @@ void Pipsolar::loop() {
         }
         if (this->power_saving_switch_) {
           this->power_saving_switch_->publish_state(value_power_saving_);
+        }
+        if (this->solar_feed_to_grid_) {
+          this->solar_feed_to_grid_->publish_state(value_solar_feed_to_grid_);
+        }
+        if (this->solar_feed_to_grid_switch_) {
+          this->solar_feed_to_grid_switch_->publish_state(value_solar_feed_to_grid_);
         }
         this->state_ = STATE_IDLE;
         break;
@@ -882,6 +895,9 @@ void Pipsolar::loop() {
             case 'j':
               this->value_power_saving_ = enabled;
               break;
+            case 'd':
+              this->value_solar_feed_to_grid_ = enabled;
+              break;
           }
         }
         if (this->last_qflag_) {
@@ -1185,14 +1201,36 @@ void Pipsolar::loop() {
         }
         this->state_ = STATE_POLL_DECODED;
         break;
-      case POLLING_HGEN:
+      case POLLING_HGEN: {
         ESP_LOGD(TAG, "Decode HGEN");
-        sscanf(tmp, "(%*s %*s %*f %f %f %f %f", &value_pv_gen_current_day_, &value_pv_gen_current_month_, &value_pv_gen_current_year_, &value_pv_gen_total_);
+        char date_str[16] = {0};
+        char time_str[16] = {0};
+        sscanf(tmp, "(%15s %15s %f %f %f %f", date_str, time_str, &value_pv_gen_current_day_, &value_pv_gen_current_month_, &value_pv_gen_current_year_, &value_pv_gen_total_);
+        if (strlen(date_str) >= 6) {
+          // Format date: 20YY-MM-DD
+          std::string date = "20" + std::string(date_str, 0, 2) + "-" + std::string(date_str, 2, 2) + "-" + std::string(date_str, 4, 2);
+          // Format time: HH:MM:00 (if only HH:MM provided)
+          std::string time = std::string(time_str);
+          if (time.length() == 5) {
+            time += ":00";
+          }
+          std::string date_time = date + " " + time;
+          if (this->inverter_date_) {
+            this->inverter_date_->publish_state(date);
+          }
+          if (this->inverter_time_) {
+            this->inverter_time_->publish_state(time);
+          }
+          if (this->current_data_time_) {
+            this->current_data_time_->publish_state(date_time);
+          }
+        }
         if (this->last_hgen_) {
           this->last_hgen_->publish_state(tmp);
         }
         this->state_ = STATE_POLL_DECODED;
         break;
+      }
       case POLLING_HGRID:
         ESP_LOGD(TAG, "Decode HGRID");
         sscanf(tmp, "(%f %f %f %f %d %d",
@@ -1436,6 +1474,7 @@ uint8_t Pipsolar::check_incoming_crc_() {
 
 bool Pipsolar::command_requires_crc_(const char *cmd) {
   static const std::unordered_set<std::string> no_crc_commands = {
+    "QT",
     "HSTS",
     "HGRID",
     "HOP",
@@ -1492,7 +1531,8 @@ uint8_t Pipsolar::send_next_command_() {
 
 void Pipsolar::send_next_poll_() {
   uint16_t crc16;
-  this->last_polling_command_ = (this->last_polling_command_ + 1) % 17;
+  const size_t max_commands = sizeof(this->used_polling_commands_) / sizeof(this->used_polling_commands_[0]);
+  this->last_polling_command_ = (this->last_polling_command_ + 1) % max_commands;
   if (this->used_polling_commands_[this->last_polling_command_].length == 0) {
     this->last_polling_command_ = 0;
   }

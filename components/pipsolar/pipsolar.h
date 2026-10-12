@@ -267,6 +267,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   PIPSOLAR_BINARY_SENSOR(alarm_on_when_primary_source_interrupt, QFLAG, int)
   PIPSOLAR_BINARY_SENSOR(fault_code_record, QFLAG, int)
   PIPSOLAR_BINARY_SENSOR(power_saving, QFLAG, int)
+  PIPSOLAR_BINARY_SENSOR(solar_feed_to_grid, QFLAG, int)
 
   // QPIWS values
   PIPSOLAR_BINARY_SENSOR(warnings_present, QPIWS, bool)
@@ -320,9 +321,9 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   PIPSOLAR_TEXT_SENSOR(last_qflag, QFLAG)
   PIPSOLAR_TEXT_SENSOR(last_qpiws, QPIWS)
   PIPSOLAR_TEXT_SENSOR(last_qt, QT)
-  PIPSOLAR_TEXT_SENSOR(current_data_time, QT)
-  PIPSOLAR_TEXT_SENSOR(inverter_date, QT)
-  PIPSOLAR_TEXT_SENSOR(inverter_time, QT)
+  PIPSOLAR_NOPOLL_ENTITY_(text_sensor::TextSensor, current_data_time)
+  PIPSOLAR_NOPOLL_ENTITY_(text_sensor::TextSensor, inverter_date)
+  PIPSOLAR_NOPOLL_ENTITY_(text_sensor::TextSensor, inverter_time)
   PIPSOLAR_TEXT_SENSOR(last_qmn, QMN)
   PIPSOLAR_TEXT_SENSOR(last_qbatcd, QBATCD)
   PIPSOLAR_TEXT_SENSOR(last_qpgs0, QPGS0)
@@ -406,6 +407,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   PIPSOLAR_SWITCH(alarm_on_primary_source_interrupt_switch, QFLAG)
   PIPSOLAR_SWITCH(fault_code_record_switch, QFLAG)
   PIPSOLAR_SWITCH(power_saving_switch, QFLAG)
+  PIPSOLAR_SWITCH(solar_feed_to_grid_switch, QFLAG)
 
   PIPSOLAR_SELECT(output_source_priority_select, QPIRI)
   PIPSOLAR_SELECT(charger_source_priority_select, QPIRI)
@@ -419,6 +421,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
 
   void switch_command(const std::string &command);
   void set_inverter_system_clock(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second);
+  void set_time_source(uint8_t source) { this->time_source_ = source; }
   void setup() override;
   void loop() override;
   void dump_config() override;
@@ -445,6 +448,7 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   size_t read_pos_{0};
   bool answer_requires_crc_=true;
   uint32_t command_start_millis_ = 0;
+  uint8_t time_source_ = 0;  // 0: QT, 1: HGEN
   uint8_t state_;
   enum State {
     STATE_IDLE = 0,

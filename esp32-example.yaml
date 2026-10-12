@@ -116,6 +116,10 @@ uart:
 pipsolar:
   uart_id: uart_0
   id: inverter0
+  # Select source for inverter datetime (current_data_time, inverter_date, inverter_time):
+  # - "QT": Standard Voltronic command (default for Axpert / PIP models).
+  # - "HGEN": Reads date and time from HGEN response (for models like ECGSolax, Datouboss that don't support QT).
+  time_source: QT
 
 sensor:
   - platform: pipsolar
@@ -576,6 +580,8 @@ binary_sensor:
 #      name: "${name} charge_onoff"
 #    solar_feed_to_grid_status:
 #      name: "${name} solar_feed_to_grid_status"
+    solar_feed_to_grid:
+      name: "${name} solar_feed_to_grid"
 
 switch:
   - platform: template
@@ -617,6 +623,8 @@ switch:
       name: "${name} fault_code_record"
     power_saving:
       name: "${name} power_saving"
+    solar_feed_to_grid:
+      name: "${name} solar_feed_to_grid"
 
 output:
   - platform: pipsolar
