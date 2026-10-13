@@ -775,6 +775,7 @@ void Pipsolar::loop() {
       case POLLING_QMUCHGCR:
       case POLLING_QT:
       case POLLING_QMN:
+      case POLLING_QVFW:
       case POLLING_HEEP1:
       case POLLING_QPRTL:
       case POLLING_HBMS3:
@@ -1091,6 +1092,11 @@ void Pipsolar::loop() {
         if (this->last_qmn_) {
           this->last_qmn_->publish_state(tmp);
         }
+        if (this->model_name_) {
+          const char *val = tmp;
+          if (val[0] == '(') val++;
+          this->model_name_->publish_state(val);
+        }
         this->state_ = STATE_POLL_DECODED;
         break;
       case POLLING_QBATCD:
@@ -1353,6 +1359,23 @@ void Pipsolar::loop() {
         this->state_ = STATE_POLL_DECODED;
         break;
       }
+      case POLLING_QVFW: {
+        ESP_LOGD(TAG, "Decode QVFW");
+        if (this->last_qvfw_) {
+          this->last_qvfw_->publish_state(tmp);
+        }
+        if (this->main_cpu_firmware_version_) {
+          const char *val = tmp;
+          if (strncmp(val, "(VERFW:", 7) == 0) {
+            val += 7;
+          } else if (val[0] == '(') {
+            val++;
+          }
+          this->main_cpu_firmware_version_->publish_state(val);
+        }
+        this->state_ = STATE_POLL_DECODED;
+        break;
+      }
       default:
         this->state_ = STATE_IDLE;
         break;
@@ -1475,6 +1498,7 @@ uint8_t Pipsolar::check_incoming_crc_() {
 bool Pipsolar::command_requires_crc_(const char *cmd) {
   static const std::unordered_set<std::string> no_crc_commands = {
     "QT",
+    "QPRTL",
     "HSTS",
     "HGRID",
     "HOP",

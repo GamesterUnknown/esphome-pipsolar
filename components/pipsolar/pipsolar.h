@@ -46,6 +46,7 @@ enum ENUMPollingCommand {
   POLLING_HBMS3 = 28,
   POLLING_HEEP2 = 29,
   POLLING_HPVB = 30,
+  POLLING_QVFW = 31,
 };
 struct PollingCommand {
   uint8_t *command;
@@ -325,6 +326,9 @@ class Pipsolar : public uart::UARTDevice, public PollingComponent {
   PIPSOLAR_NOPOLL_ENTITY_(text_sensor::TextSensor, inverter_date)
   PIPSOLAR_NOPOLL_ENTITY_(text_sensor::TextSensor, inverter_time)
   PIPSOLAR_TEXT_SENSOR(last_qmn, QMN)
+  PIPSOLAR_TEXT_SENSOR(model_name, QMN)
+  PIPSOLAR_TEXT_SENSOR(last_qvfw, QVFW)
+  PIPSOLAR_TEXT_SENSOR(main_cpu_firmware_version, QVFW)
   PIPSOLAR_TEXT_SENSOR(last_qbatcd, QBATCD)
   PIPSOLAR_TEXT_SENSOR(last_qpgs0, QPGS0)
   PIPSOLAR_TEXT_SENSOR(last_qet, QET)

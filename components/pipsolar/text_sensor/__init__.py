@@ -15,6 +15,9 @@ CONF_LAST_QFLAG = "last_qflag"
 CONF_LAST_QPIWS = "last_qpiws"
 CONF_LAST_QT = "last_qt"
 CONF_LAST_QMN = "last_qmn"
+CONF_MODEL_NAME = "model_name"
+CONF_LAST_QVFW = "last_qvfw"
+CONF_MAIN_CPU_FIRMWARE_VERSION = "main_cpu_firmware_version"
 CONF_LAST_QBATCD = "last_qbatcd"
 CONF_CUSTOM_COMMAND = "last_custom_command"
 CONF_CURRENT_DATA_TIME = "current_data_time"
@@ -60,6 +63,9 @@ TYPES = [
     CONF_LAST_QPIWS,
     CONF_LAST_QT,
     CONF_LAST_QMN,
+    CONF_MODEL_NAME,
+    CONF_LAST_QVFW,
+    CONF_MAIN_CPU_FIRMWARE_VERSION,
     CONF_LAST_QBATCD,
 #    CONF_LAST_MUCHGC,
 #    CONF_LAST_MCHGC,

@@ -205,10 +205,6 @@ sensor:
       name: "${name} pv1_input_current"
     pv1_input_voltage:
       name: "${name} pv1_input_voltage"
-    pv2_input_current:
-      name: "${name} pv2_input_current"
-    pv2_input_voltage:
-      name: "${name} pv2_input_voltage"
     battery_voltage_scc:
       name: "${name} battery_voltage_scc"
     battery_discharge_current:
@@ -219,6 +215,12 @@ sensor:
 #      name: "${name} eeprom_version"
     pv1_charging_power:
       name: "${name} pv1_charging_power"
+
+    # QPIGS2
+    pv2_input_current:
+      name: "${name} pv2_input_current"
+    pv2_input_voltage:
+      name: "${name} pv2_input_voltage"
     pv2_charging_power:
       name: "${name} pv2_charging_power"
 
@@ -427,10 +429,25 @@ sensor:
 text_sensor:
   - platform: pipsolar
     pipsolar_id: inverter0
+    # QPIRI
+#    last_qpiri:
+#      name: "${name} last_qpiri"
+
+    # QPIGS
+#    last_qpigs:
+#      name: "${name} last_qpigs"
+
+    # QMOD
     device_mode:
       name: "${name} device_mode"
-    last_custom_command:
-      name: "${name} last_custom_command"
+#    last_qmod:
+#      name: "${name} last_qmod"
+
+    # QFLAG
+#    last_qflag:
+#      name: "${name} last_qflag"
+
+    # Date / Time (Read from QT or HGEN according to time_source)
     current_data_time:
       name: "${name} current_data_time"
       id: inverter_current_data_time
@@ -439,7 +456,8 @@ text_sensor:
 #    last_hgen:
 #      name: "${name} last_hgen"
 
-    # HGRID (HPVINV02 protocol - AC Grid raw + parsed)
+    # HPVINV02 protocol commands (HGRID, HOP, HPV, HBAT, HTEMP, HIMSG1, HEEP1, HSTS, QPRTL, HBMS1..3, HEEP2, HPVB)
+    # HGRID (HPVINV02 protocol - AC Grid raw)
 #    last_hgrid:
 #      name: "${name} last_hgrid"
 
@@ -505,37 +523,54 @@ text_sensor:
 #    last_hpvb:
 #      name: "${name} last_hpvb"
 
-#    # QPGS0 - parallel inverter operation (raw response)
-#    last_qpgs0:
-#      name: "${name} last_qpgs0"
+    # QET / QLT
 #    last_qet:
 #      name: "${name} last_qet"
 #    last_qlt:
 #      name: "${name} last_qlt"
+
+    # QMCHGCR / QMUCHGCR
 #    last_qmchgcr:
 #      name: "${name} last_qmchgcr"
 #    last_qmuchgcr:
 #      name: "${name} last_qmuchgcr"
+
+    # Q1
 #    last_q1:
 #      name: "${name} last_q1"
-#    last_qbms:
-#      name: "${name} last_qbms"
-#    work_mode_0:
-#      name: "${name} work_mode_0"
 #    inverter_charge_status:
 #      name: "${name} inverter_charge_status"
-#    last_qpigs:
-#      name: "${name} last_qpigs"
-#    last_qpiri:
-#      name: "${name} last_qpiri"
-#    last_qmod:
-#      name: "${name} last_qmod"
-#    last_qflag:
-#      name: "${name} last_qflag"
+
+    # QBMS
+#    last_qbms:
+#      name: "${name} last_qbms"
+
+    # QPGS0 - parallel inverter operation (raw response)
+#    last_qpgs0:
+#      name: "${name} last_qpgs0"
+#    work_mode_0:
+#      name: "${name} work_mode_0"
+
+    # QMN (Model Name Inquiry)
+#    last_qmn:
+#      name: "${name} last_qmn"
+#    model_name:
+#      name: "${name} model_name"
+
+    # QVFW (Main CPU Firmware Version Inquiry)
+#    last_qvfw:
+#      name: "${name} last_qvfw"
+#    main_cpu_firmware_version:
+#      name: "${name} main_cpu_firmware_version"
+
+    # Custom Command
+    last_custom_command:
+      name: "${name} last_custom_command"
 
 binary_sensor:
   - platform: pipsolar
     pipsolar_id: inverter0
+    # QPIGS status flags
     add_sbu_priority_version:
       name: "${name} add_sbu_priority_version"
     configuration_status:
@@ -558,6 +593,8 @@ binary_sensor:
       name: "${name} switch_on"
 #    dustproof_installed:
 #      name: "${name} dustproof_installed"
+
+    # QFLAG flags
     silence_buzzer_open_buzzer:
       name: "${name} silence_buzzer_open_buzzer"
     overload_bypass_function:
@@ -572,6 +609,10 @@ binary_sensor:
 #      name: "${name} backlight_on"
 #    warning_battery_weak:
 #      name: "${name} warning_battery_weak"
+    solar_feed_to_grid:
+      name: "${name} solar_feed_to_grid"
+
+    # QBATCD flags
 #    discharge_onoff:
 #      name: "${name} discharge_onoff"
 #    discharge_with_standby_onoff:
@@ -580,8 +621,6 @@ binary_sensor:
 #      name: "${name} charge_onoff"
 #    solar_feed_to_grid_status:
 #      name: "${name} solar_feed_to_grid_status"
-    solar_feed_to_grid:
-      name: "${name} solar_feed_to_grid"
 
 switch:
   - platform: template
@@ -593,6 +632,7 @@ switch:
 
   - platform: pipsolar
     pipsolar_id: inverter0
+    # QPIRI control switches (POP00, POP01, POP02, PGR, PPVOKC, PSPB)
     output_source_priority_utility:
       name: "${name} output_source_priority_utility"
     output_source_priority_solar:
@@ -605,6 +645,8 @@ switch:
       name: "${name} pv_ok_condition_for_parallel"
     pv_power_balance:
       name: "${name} pv_power_balance"
+
+    # QFLAG control switches (PE<x> / PD<x>)
     buzzer:
       name: "${name} buzzer"
     overload_bypass:
