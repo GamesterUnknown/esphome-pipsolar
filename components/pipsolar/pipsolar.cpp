@@ -1523,7 +1523,7 @@ uint8_t Pipsolar::send_next_command_() {
   uint16_t crc16;
   if (this->command_queue_[this->command_queue_position_].length() != 0) {
     const char *command = this->command_queue_[this->command_queue_position_].c_str();
-    uint8_t byte_command[20];
+    uint8_t byte_command[30];
     size_t length = this->command_queue_[this->command_queue_position_].length();
     if (length >= sizeof(byte_command)) {
       ESP_LOGE(TAG, "Command too long: %zu", length);
